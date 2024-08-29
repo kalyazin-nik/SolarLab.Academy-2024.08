@@ -1,19 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolarLab.Academy.Domain.Base;
 
-namespace SolarLab.Academy.Infrastructure.Repository
+namespace SolarLab.Academy.Infrastructure.Repository;
+
+/// <summary>
+/// Интерфейс репозитория.
+/// </summary>
+/// <typeparam name="TEntity">Объект типа <see cref="BaseEntity"/>.</typeparam>
+public interface IRepository<TEntity>
+    where TEntity : BaseEntity
 {
-    public interface IRepository<TEntity> where TEntity : class
-    {
-        /// <summary>
-        /// Возвращает все элементы сущности <see cref="TEntity"/>
-        /// </summary>
-        /// <returns>Все элементы сущности <see cref="TEntity"/></returns>
-        IQueryable<TEntity> GetAll();
+    /// <summary>
+    /// Добваление новой сущности  <see cref="TEntity"/>.
+    /// </summary>
+    /// <param name="entity">Объект сущности  <see cref="TEntity"/>.</param>
+    void Add(TEntity entity);
 
-        //TODO
-    }
+    /// <summary>
+    /// Удаление сущности <see cref="TEntity"/> по идентификатору.
+    /// </summary>
+    /// <param name="id">Идентификатор сущности.</param>
+    /// <returns>В случае успеха true, иначе false.</returns>
+    bool Delete(Guid id);
+
+    /// <summary>
+    /// Возвращает все элементы сущности <see cref="TEntity"/>
+    /// </summary>
+    /// <returns>Все элементы сущности <see cref="TEntity"/></returns>
+    IEnumerable<TEntity> GetAll();
+
+    /// <summary>
+    /// Возвращает элементы сущности <see cref="TEntity"/> по условию.
+    /// </summary>
+    /// <param name="predicate">Условие.</param>
+    /// <returns>Элементы сущности <see cref="TEntity"/> удовлетворившие условие.</returns>
+    IEnumerable<TEntity> GetByPredicate(Predicate<TEntity> predicate);
+
+    /// <summary>
+    /// Обновление сущности <see cref="TEntity"/>.
+    /// </summary>
+    /// <param name="entity">Объект сущности  <see cref="TEntity"/>.</param>
+    void Update(TEntity entity);
 }

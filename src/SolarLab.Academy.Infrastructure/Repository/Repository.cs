@@ -1,20 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SolarLab.Academy.Domain.Base;
 
-namespace SolarLab.Academy.Infrastructure.Repository
+namespace SolarLab.Academy.Infrastructure.Repository;
+
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
+public class Repository<TEntity> : IRepository<TEntity>
+    where TEntity : BaseEntity
 {
-    /// <inheritdoc />
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public void Add(TEntity entity)
     {
-        /// <inheritdoc />
-        public IQueryable<TEntity> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
 
-        //TODO
+    public bool Delete(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<TEntity> GetAll()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<TEntity> GetByPredicate(Predicate<TEntity> predicate)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Update(TEntity entity)
+    {
+        throw new NotImplementedException();
     }
 }
