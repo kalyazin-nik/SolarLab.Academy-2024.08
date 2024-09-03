@@ -30,6 +30,10 @@ public sealed class OrderItemDto
     /// </summary>
     public Guid OrderID { get; set; }
 
+    /// <summary>
+    /// Возвращает строку, представляющую текущий объект.
+    /// </summary>
+    /// <returns>Строка, представляющая текущий объект.</returns>
     public override string ToString()
     {
         return $"{Name}. Count: {Count}. Price: {Price}. OrderID: {OrderID}";

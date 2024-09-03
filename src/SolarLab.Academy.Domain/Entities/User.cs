@@ -37,6 +37,10 @@ public sealed class User : BaseEntity
     /// </summary>
     public bool IsBlocked { get; set; }
 
+    /// <summary>
+    /// Возвращает строку, представляющую текущий объект.
+    /// </summary>
+    /// <returns>Строка, представляющая текущий объект.</returns>
     public override string ToString()
     {
         return $"{Name}. {Login}. BirthDate: {BirthDate}";

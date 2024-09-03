@@ -1,12 +1,29 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SolarLab.Academy.AppServices.Account.Services;
+using SolarLab.Academy.AppServices.User.Repository;
+using SolarLab.Academy.AppServices.User.Services;
+using SolarLab.Academy.AppServices.WeatherForecast.Services;
+using SolarLab.Academy.Infrastructure.FakeDB;
 
 namespace SolarLab.Academy.ComponentRegistrar;
 
+/// <summary>
+/// Класс регистрации компонентов.
+/// </summary>
 public static class ComponentRegistrar
 {
-    public static IServiceCollection AddServices(this IServiceCollection services)
+    /// <summary>
+    /// Добавление служб приложений.
+    /// </summary>
+    /// <param name="services">Коллекция сервисов.</param>
+    /// <returns>Коллекция сервисов с добавленными службами приложения.</returns>
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        //TODO
+        services.AddTransient<IWeatherForecastService, WeatherForecastService>();
+        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IAccountService, AccountService>();
+        services.AddSingleton<IUserRepository, UserRepository>();
+
         return services;
     }
 }

@@ -42,7 +42,10 @@ public sealed class OrderDto
     /// </summary>
     public Guid UserID { get; set; }
 
-
+    /// <summary>
+    /// Возвращает строку, представляющую текущий объект.
+    /// </summary>
+    /// <returns>Строка, представляющая текущий объект.</returns>
     public override string ToString()
     {
         return $"{Description}. Amount: {Amount}. TotalCount: {TotalCount}. OrderStatus: {OrderStatus}";

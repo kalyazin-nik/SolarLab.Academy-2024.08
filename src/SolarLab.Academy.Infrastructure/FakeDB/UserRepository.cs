@@ -6,26 +6,40 @@ namespace SolarLab.Academy.Infrastructure.FakeDB;
 
 public class UserRepository : IUserRepository
 {
-    private List<User> _users;
+    private readonly List<User> _users = [];
+    private readonly List<UserDto> _usersDto = [];
 
-    public UserRepository()
+    public async Task<IReadOnlyCollection<UserDto>> GetAllAsync(CancellationToken cancellationToken)
     {
-        _users = new List<User>();
+        return await Task.FromResult<IReadOnlyCollection<UserDto>>(_usersDto);
     }
 
-    public Task<UserDto> Register(UserDto model, string password, CancellationToken cancellationToken)
+    public async Task<UserDto> RegisterAsync(UserDto model, string password, CancellationToken cancellationToken)
     {
-        return Task.Run(() =>
+        var user = new User
         {
-            var user = new User
-            {
-                Id = model.ID,
+            Id = Guid.NewGuid(),
+            Name = model.Name,
+            BirthDate = model.BirthDate,
+            Email = model.Email,
+            Login = model.Login,
+            Password = password,
+            IsBlocked = false,
+            CreatedAt = DateTime.UtcNow
+        };
 
-            };
+        var userDto = new UserDto
+        {
+            ID = user.Id,
+            Name = user.Name,
+            BirthDate = user.BirthDate,
+            Email = user.Email,
+            Login = user.Login
+        };
 
-            _users.Add(user);
+        _users.Add(user);
+        _usersDto.Add(userDto);
 
-            return model;
-        }, cancellationToken).WaitAsync(cancellationToken);
+        return await Task.FromResult(userDto);
     }
 }
