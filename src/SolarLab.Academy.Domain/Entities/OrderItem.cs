@@ -32,6 +32,10 @@ public sealed class OrderItem : BaseEntity
     /// </summary>
     public Order Order { get; set; } = null!;
 
+    /// <summary>
+    /// Возвращает строку, представляющую текущий объект.
+    /// </summary>
+    /// <returns>Строка, представляющая текущий объект.</returns>
     public override string ToString()
     {
         return $"{Name}. Count: {Count}. Price: {Price}. OrderID: {OrderID}";

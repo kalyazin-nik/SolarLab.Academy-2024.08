@@ -48,6 +48,10 @@ public sealed class Order : BaseEntity
     /// </summary>
     public ICollection<OrderItem> Items { get; set; } = null!;
 
+    /// <summary>
+    /// Возвращает строку, представляющую текущий объект.
+    /// </summary>
+    /// <returns>Строка, представляющая текущий объект.</returns>
     public override string ToString()
     {
         return $"{Description}. Amount: {Amount}. TotalCount: {TotalCount}. OrderStatus: {OrderStatus}";

@@ -4,5 +4,5 @@ namespace SolarLab.Academy.AppServices.User.Services;
 
 public interface IUserService
 {
-    Task<UserDto> Register(UserRegisterRequestDto model, CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<UserDto>> GetAllAsync(CancellationToken cancellationToken);
 }

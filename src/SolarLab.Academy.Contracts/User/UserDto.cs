@@ -30,6 +30,10 @@ public sealed class UserDto
     /// </summary>
     public string Login { get; set; } = null!;
 
+    /// <summary>
+    /// Возвращает строку, представляющую текущий объект.
+    /// </summary>
+    /// <returns>Строка, представляющая текущий объект.</returns>
     public override string ToString()
     {
         return $"{Name}. {Login}. BirthDate: {BirthDate}";
