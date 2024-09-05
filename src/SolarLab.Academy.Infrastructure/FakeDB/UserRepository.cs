@@ -1,4 +1,5 @@
-﻿using SolarLab.Academy.AppServices.User.Repository;
+﻿using SolarLab.Academy.AppServices.Exceptions;
+using SolarLab.Academy.AppServices.User.Repository;
 using SolarLab.Academy.Contracts.User;
 using SolarLab.Academy.Domain.Entities;
 
@@ -6,12 +7,21 @@ namespace SolarLab.Academy.Infrastructure.FakeDB;
 
 public class UserRepository : IUserRepository
 {
-    private readonly List<User> _users = [];
-    private readonly List<UserDto> _usersDto = [];
+    private readonly Dictionary<Guid, User> _users = [];
 
     public async Task<IReadOnlyCollection<UserDto>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await Task.FromResult<IReadOnlyCollection<UserDto>>(_usersDto);
+        if (_users.Count is 0)
+        {
+            throw new EntitiesNotFoundException("Сущности пользователей не были найдены.");
+        }
+
+        return await Task.FromResult<IReadOnlyCollection<UserDto>>(_users.Values.Select(GetUserDto).ToList());
+    }
+
+    public async Task<UserDto> GetUserAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await Task.FromResult(TryGetUserDto(id));
     }
 
     public async Task<UserDto> RegisterAsync(UserDto model, string password, CancellationToken cancellationToken)
@@ -37,9 +47,32 @@ public class UserRepository : IUserRepository
             Login = user.Login
         };
 
-        _users.Add(user);
-        _usersDto.Add(userDto);
+        _users.Add(user.Id, user);
 
         return await Task.FromResult(userDto);
+    }
+
+    private UserDto TryGetUserDto(Guid id)
+    {
+        _users.TryGetValue(id, out var user);
+
+        if (user is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        return GetUserDto(user);
+    }
+
+    private UserDto GetUserDto(User user)
+    {
+        return new UserDto
+        {
+            ID = user.Id,
+            Name = user.Name,
+            BirthDate = user.BirthDate,
+            Email = user.Email,
+            Login = user.Login
+        };
     }
 }

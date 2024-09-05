@@ -13,7 +13,7 @@ namespace SolarLab.Academy.Api.Controllers;
 /// </remarks>
 /// <param name="accountService"></param>
 [ApiController]
-[Route("account")]
+[Route("accounts")]
 public class AccountController(IAccountService accountService) : ControllerBase
 {
     private readonly IAccountService _accountService = accountService;

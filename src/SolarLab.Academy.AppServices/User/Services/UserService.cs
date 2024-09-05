@@ -11,4 +11,9 @@ public class UserService(IUserRepository userRepository) : IUserService
     {
         return await _userRepository.GetAllAsync(cancellationToken);
     }
+
+    public async Task<UserDto> GetUserAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _userRepository.GetUserAsync(id, cancellationToken);
+    }
 }
