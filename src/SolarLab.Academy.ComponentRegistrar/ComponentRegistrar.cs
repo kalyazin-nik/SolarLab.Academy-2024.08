@@ -2,8 +2,6 @@
 using SolarLab.Academy.AppServices.Account.Services;
 using SolarLab.Academy.AppServices.User.Repository;
 using SolarLab.Academy.AppServices.User.Services;
-using SolarLab.Academy.AppServices.WeatherForecast.Services;
-using SolarLab.Academy.Infrastructure.FakeDB;
 
 namespace SolarLab.Academy.ComponentRegistrar;
 
@@ -19,7 +17,6 @@ public static class ComponentRegistrar
     /// <returns>Коллекция сервисов с добавленными службами приложения.</returns>
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddTransient<IWeatherForecastService, WeatherForecastService>();
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IAccountService, AccountService>();
         services.AddSingleton<IUserRepository, UserRepository>();

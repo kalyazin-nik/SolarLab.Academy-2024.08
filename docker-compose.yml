@@ -1,0 +1,58 @@
+services:
+  solarlab.academy.api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: src/SolarLab.Academy.Api/Dockerfile
+
+  solarlab.academy.dbmigrator:
+    image: ${DOCKER_REGISTRY-}dbmigrator
+    build:
+      context: .
+      dockerfile: src/SolarLab.Academy.DbMigrator/Dockerfile
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5433"
+    networks:
+      - postgres
+ 
+  adminer:
+    image: adminer
+    ports: 
+      - 8080:8080
+
+  pgadmin:
+    # container_name: pgadmin4
+    image: dpage/pgadmin4:8.11
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "kalyazin.nik@yandex.ru"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.5'
+    #       memory: 1G
+    networks:
+      - postgres
+  
+volumes: 
+  postgres-data:
+  pgadmin-data:
+
+networks:
+  postgres:
+    driver: bridge
+
