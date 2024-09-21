@@ -1,6 +1,5 @@
 ﻿using SolarLab.Academy.AppServices.Categories.Repositories;
 using SolarLab.Academy.Contracts.Categories;
-using SolarLab.Academy.Domain;
 
 namespace SolarLab.Academy.AppServices.Categories.Services;
 
@@ -16,11 +15,7 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
 
     public async Task<Guid> AddAsync(CategoryCreateDto dto, CancellationToken cancellationToken)
     {
-        return await _categoryRepository.AddAsync(new Category
-        {
-            Name = dto.Name,
-            CreatedAt = DateTime.UtcNow
-        }, cancellationToken);
+        return await _categoryRepository.AddAsync(dto, cancellationToken);
     }
 
     #endregion
@@ -29,20 +24,7 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
 
     public async Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetByIdAsync(id, cancellationToken);
-
-        if (category is not null)
-        {
-            return new CategoryDto
-            {
-                Id = category.Id,
-                Name = category.Name,
-                CreatedAt = category.CreatedAt,
-                ParentID = category.ParentID
-            };
-        }
-
-        return null;
+        return await _categoryRepository.GetByIdAsync(id, cancellationToken);
     }
 
     #endregion

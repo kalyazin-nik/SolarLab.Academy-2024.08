@@ -9,4 +9,14 @@ public class CategoryCreateDto
     /// Название категории.
     /// </summary>
     public string Name { get; set; }
+
+    /// <summary>
+    /// Описание.
+    /// </summary>
+    public string Description { get; set; }
+
+    /// <summary>
+    /// Номер.
+    /// </summary>
+    public string Number { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using SolarLab.Academy.Domain;
+﻿using SolarLab.Academy.Contracts.Categories;
+using SolarLab.Academy.Domain;
 
 namespace SolarLab.Academy.AppServices.Categories.Repositories;
 
@@ -15,7 +16,7 @@ public interface ICategoryRepository
     /// <param name="category">Категория.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Идентификатор созданной категории.</returns>
-    Task<Guid> AddAsync(Category category, CancellationToken cancellationToken);
+    Task<Guid> AddAsync(CategoryCreateDto dto, CancellationToken cancellationToken);
 
     #endregion
 
@@ -27,7 +28,7 @@ public interface ICategoryRepository
     /// <param name="id">Идентификатор категории.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Категория. Вернётся null, если категория не будет найдена.</returns>
-    Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     #endregion
 }

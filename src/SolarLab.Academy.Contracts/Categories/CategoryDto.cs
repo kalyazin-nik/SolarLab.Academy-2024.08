@@ -18,10 +18,20 @@ public class CategoryDto
     /// <summary>
     /// Родительская категория.
     /// </summary>
-    public Guid? ParentID { get; set; }
+    public Guid? ParentId { get; set; }
 
     /// <summary>
     /// Наименование.
     /// </summary>
     public string Name { get; set; }
+
+    /// <summary>
+    /// Описание.
+    /// </summary>
+    public string Description { get; set; }
+
+    /// <summary>
+    /// Номер.
+    /// </summary>
+    public string Number { get; set; }
 }
