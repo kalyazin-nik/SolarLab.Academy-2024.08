@@ -3,31 +3,31 @@
 /// <summary>
 /// Объявление.
 /// </summary>
-public class Advert(Guid id, string name, string description, Guid categoryID, DateTime createdAt) : EntityBase
+public class Advert : EntityBase
 {
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; } = id;
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Дата создания.
     /// </summary>
-    public DateTime CreatedAt { get; set; } = createdAt;
+    public DateTime CreatedAt { get; set; }
 
     /// <summary>
     /// Наименование.
     /// </summary>
-    public string Name { get; set; } = name;
+    public string Name { get; set; }
 
     /// <summary>
     /// Описание.
     /// </summary>
-    public string Description { get; set; } = description;
+    public string Description { get; set; }
 
     public bool IsDisabled { get; set; }
 
-    public Guid CategoryID { get; set; } = categoryID;
+    public Guid CategoryID { get; set; }
     public virtual Category Category { get; set; }
 
     /// <summary>

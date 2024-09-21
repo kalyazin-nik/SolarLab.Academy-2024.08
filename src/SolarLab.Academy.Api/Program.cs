@@ -1,8 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using SolarLab.Academy.Api.Controllers;
 using SolarLab.Academy.Api.Middlewares;
 using SolarLab.Academy.ComponentRegistrar;
 using SolarLab.Academy.Contracts.User;
+using SolarLab.Academy.DataAccess;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SolarLab.Academy.Api;
@@ -23,6 +26,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(AddSwaggerGen);
         builder.Services.AddApplicationServices();
+        builder.Services.AddDbContext<AcademyDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
         var app = builder.Build();
         app.UseMiddleware<ExceptionHandlingMiddleware>();
