@@ -1,11 +1,12 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using SolarLab.Academy.Domain;
 
 namespace SolarLab.Academy.Infrastructure.Repository;
 
 /// <inheridoc />
 public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
-    where TEntity : class
+    where TEntity : EntityBase
     where TContext : DbContext
 {
     protected TContext DbContext;

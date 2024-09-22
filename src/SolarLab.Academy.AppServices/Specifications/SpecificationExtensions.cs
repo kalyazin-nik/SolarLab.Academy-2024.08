@@ -1,0 +1,62 @@
+﻿using System.Linq.Expressions;
+using SolarLab.Academy.AppServices.Specifications.Internal;
+
+namespace SolarLab.Academy.AppServices.Specifications;
+
+/// <summary>
+/// Набор расширений для спецификаций.
+/// </summary>
+public static class SpecificationExtensions
+{
+    /// <summary>
+    /// Компонует две спецификации при помощи логического оператора "И".
+    /// </summary>
+    public static Specification<T> And<T>(this ISpecification<T> left, ISpecification<T> right)
+    {
+        ArgumentNullException.ThrowIfNull(left);
+        ArgumentNullException.ThrowIfNull(right);
+
+        return new AndSpecification<T>(left, right);
+    }
+
+    /// <summary>
+    /// Компонует спецификацию с деревом выражений предиката при помощи логического оператора "И".
+    /// </summary>
+    public static Specification<T> AndPredicate<T>(this ISpecification<T> left, Expression<Func<T, bool>> expression)
+    {
+        ArgumentNullException.ThrowIfNull(expression);
+
+        return new AndSpecification<T>(left, Specification<T>.FromPredicate(expression));
+    }
+
+    /// <summary>
+    /// Компонует две спецификации при помощи логического оператора "ИЛИ".
+    /// </summary>
+    public static Specification<T> Or<T>(this ISpecification<T> left, ISpecification<T> right)
+    {
+        ArgumentNullException.ThrowIfNull(left);
+        ArgumentNullException.ThrowIfNull(right);
+
+        return new OrSpecification<T>(left, right);
+    }
+
+    /// <summary>
+    /// Компонует спецификацию с деревом выражений предиката при помощи логического оператора "ИЛИ".
+    /// </summary>
+    public static Specification<T> OrPredicate<T>(this ISpecification<T> left, Expression<Func<T, bool>> expression)
+    {
+        ArgumentNullException.ThrowIfNull(expression);
+
+        return new OrSpecification<T>(left, Specification<T>.FromPredicate(expression));
+    }
+
+    /// <summary>
+    /// Выполняет отрицание спецификации.
+    /// </summary>
+    public static Specification<T> Not<T>(this ISpecification<T> specification)
+    {
+        ArgumentNullException.ThrowIfNull(specification);
+
+        return new NotSpecification<T>(specification);
+    }
+}

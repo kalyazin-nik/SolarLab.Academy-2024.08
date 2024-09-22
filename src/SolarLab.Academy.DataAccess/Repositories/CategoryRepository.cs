@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using SolarLab.Academy.AppServices.Categories.Repositories;
+using Microsoft.EntityFrameworkCore;
+using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
 using SolarLab.Academy.Contracts.Categories;
 using SolarLab.Academy.Domain;
 using SolarLab.Academy.Infrastructure.Repository;
 
 namespace SolarLab.Academy.DataAccess.Repositories;
 
-/// <inheritdoc />
+/// <summary>
+/// Репозиторий для работы с категориями.
+/// </summary>
+/// <param name="repository">Репозиторий.</param>
+/// <param name="mapper">Маппер.</param>
 public class CategoryRepository(IRepository<Category, AcademyDbContext> repository, IMapper mapper) : ICategoryRepository
 {
     private readonly IRepository<Category, AcademyDbContext> _repository = repository;
@@ -15,6 +20,7 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
 
     #region Add
 
+    /// <inheritdoc />
     public async Task<Guid> AddAsync(CategoryCreateDto dto, CancellationToken cancellationToken)
     {
         var category = _mapper.Map<CategoryCreateDto, Category>(dto);
@@ -27,13 +33,13 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
 
     #region Get
 
+    /// <inheritdoc />
     public async Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(_repository.GetAll()
+        return await _repository.GetAll()
             .Where(x => x.Id == id)
             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefault()
-        );
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     #endregion

@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using SolarLab.Academy.Domain;
 
 namespace SolarLab.Academy.Infrastructure.Repository;
 
@@ -9,7 +10,7 @@ namespace SolarLab.Academy.Infrastructure.Repository;
 /// <typeparam name="TEntity">Сущность хранимая в репозитории.</typeparam>
 /// <typeparam name="TContext">Контекст подключения к репозиторию.</typeparam>
 public interface IRepository<TEntity, TContext>
-    where TEntity : class
+    where TEntity : EntityBase
     where TContext : DbContext
 {
     #region Add

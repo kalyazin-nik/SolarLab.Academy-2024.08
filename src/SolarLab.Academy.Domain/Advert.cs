@@ -18,17 +18,32 @@ public class Advert : EntityBase
     /// <summary>
     /// Наименование.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// Описание.
     /// </summary>
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
-    public bool IsDisabled { get; set; }
+    /// <summary>
+    /// Цена.
+    /// </summary>
+    public decimal Price { get; set; }
 
-    public Guid CategoryID { get; set; }
-    public virtual Category Category { get; set; }
+    /// <summary>
+    /// Является ли объявление отключенным.
+    /// </summary>
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Идентификатор категории.
+    /// </summary>
+    public Guid CategoryId { get; set; }
+
+    /// <summary>
+    /// Навигационное свойство категории.
+    /// </summary>
+    public virtual Category Category { get; set; } = null!;
 
     /// <summary>
     /// Возвращает строку, представляющую текущий объект.
