@@ -28,8 +28,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     {
         var categoryId = await _categoryService.AddAsync(dto, cancellationToken);
 
-        //return StatusCode((int)HttpStatusCode.Created, categoryId);
-        return Ok(categoryId);
+        return StatusCode((int)HttpStatusCode.Created, categoryId);
     }
 
     /// <summary>
@@ -45,6 +44,6 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     {
         var categoryDto = await _categoryService.GetByIdAsync(id, cancellationToken);
 
-        return Ok(categoryDto);
+        return categoryDto is not null ? Ok(categoryDto) : NoContent();
     }
 }

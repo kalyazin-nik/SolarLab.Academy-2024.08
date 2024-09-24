@@ -30,7 +30,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     {
         var advertId = await _advertService.AddAsync(dto, cancellationToken);
 
-        return Ok(advertId);
+        return StatusCode((int)HttpStatusCode.Created, advertId);
     }
 
     #endregion
@@ -50,12 +50,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     {
         var shortAdvertDtos = await _advertService.GetByCategoryIdAsync(categoryId, cancellationToken);
 
-        if (shortAdvertDtos.Count > 0)
-        {
-            return Ok(shortAdvertDtos);
-        }
-
-        return Ok(null);
+        return shortAdvertDtos.Count > 0 ? Ok(shortAdvertDtos) : NoContent();
     }
 
     /// <summary>
@@ -71,7 +66,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     {
         var advertDto = await _advertService.GetByIdAsync(id, cancellationToken);
 
-        return Ok(advertDto);
+        return advertDto is not null ? Ok(advertDto) : NoContent();
     }
 
     /// <summary>
@@ -87,12 +82,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     {
         var advertDtos = await _advertService.GetBySearchRequestAsync(request, cancellationToken);
 
-        if (advertDtos.Count > 0)
-        {
-            return Ok(advertDtos);
-        }
-
-        return Ok(null);
+        return advertDtos.Count > 0 ? Ok(advertDtos) : NoContent();
     }
 
     /// <summary>
@@ -108,12 +98,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     {
         var advertDtos = await _advertService.GetBySpecificationAsync(request, cancellationToken);
 
-        if (advertDtos.Count > 0)
-        {
-            return Ok(advertDtos);
-        }
-
-        return Ok(null);
+        return advertDtos.Count > 0 ? Ok(advertDtos) : NoContent();
     }
 
     #endregion
