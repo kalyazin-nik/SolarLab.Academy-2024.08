@@ -1,9 +1,9 @@
-﻿namespace SolarLab.Academy.Contracts.User;
+﻿namespace SolarLab.Academy.Domain;
 
 /// <summary>
-/// Объект передачи данных пользователя.
+/// Пользователь.
 /// </summary>
-public sealed class UserDto
+public class User : EntityBase
 {
     /// <summary>
     /// Идентификатор пользователя.
@@ -31,11 +31,12 @@ public sealed class UserDto
     public string Login { get; set; } = null!;
 
     /// <summary>
-    /// Возвращает строку, представляющую текущий объект.
+    /// Пароль.
     /// </summary>
-    /// <returns>Строка, представляющая текущий объект.</returns>
-    public override string ToString()
-    {
-        return $"{Name}. {Login}. BirthDate: {BirthDate}";
-    }
+    public string Password { get; set; } = null!;
+
+    /// <summary>
+    /// Дата создания.
+    /// </summary>
+    public DateTime CreeatedAt { get; set; }
 }

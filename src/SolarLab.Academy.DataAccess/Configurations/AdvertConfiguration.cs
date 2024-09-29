@@ -4,7 +4,7 @@ using SolarLab.Academy.Domain;
 
 namespace SolarLab.Academy.DataAccess.Configurations;
 
-public class AdvertConfiguration : IEntityTypeConfiguration<Advert>
+internal class AdvertConfiguration : IEntityTypeConfiguration<Advert>
 {
     public void Configure(EntityTypeBuilder<Advert> builder)
     {

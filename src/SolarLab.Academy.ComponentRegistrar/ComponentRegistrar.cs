@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SolarLab.Academy.AppServices.Contexts.Account.Services;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Builders;
@@ -31,18 +32,17 @@ public static class ComponentRegistrar
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IAdvertService, AdvertService>();
         services.AddScoped<IFileContentService, FileContentService>();
-        services.AddTransient<IUserService, UserService>();
-        services.AddTransient<IAccountService, AccountService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAccountService, AccountService>();
 
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IAdvertRepository, AdvertRepository>();
         services.AddScoped<IFileContentRepository, FileContentRepository>();
-        services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddScoped<IAdvertSpecificationBuilder, AdvertSpecificationBuilder>();
-
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
-
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddSingleton<IMapper>(new Mapper(GetMapperConfiguration()));
 
         return services;
@@ -55,6 +55,7 @@ public static class ComponentRegistrar
             config.AddProfile<CategoryProfile>();
             config.AddProfile<AdvertProfile>();
             config.AddProfile<FileContentProfile>();
+            config.AddProfile<UserProfile>();
         });
 
         configuration.AssertConfigurationIsValid();

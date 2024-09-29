@@ -4,7 +4,7 @@ using SolarLab.Academy.Domain;
 
 namespace SolarLab.Academy.DataAccess.Configurations;
 
-public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {

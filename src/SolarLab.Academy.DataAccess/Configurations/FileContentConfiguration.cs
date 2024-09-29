@@ -4,7 +4,7 @@ using SolarLab.Academy.Domain;
 
 namespace SolarLab.Academy.DataAccess.Configurations;
 
-public class FileContentConfiguration : IEntityTypeConfiguration<FileContent>
+internal class FileContentConfiguration : IEntityTypeConfiguration<FileContent>
 {
     public void Configure(EntityTypeBuilder<FileContent> builder)
     {
