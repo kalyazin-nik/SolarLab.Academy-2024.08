@@ -10,13 +10,15 @@ namespace SolarLab.Academy.Api.Controllers;
 /// Контроллер учётных записей.
 /// </summary>
 /// <param name="accountService">Сервис по работе с учетными записями.</param>
+/// <param name="logger">Логгер <see cref="AccountController"/></param>
 [ApiController]
 [Route("accounts")]
 [AllowAnonymous]
 [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-public class AccountController(IAccountService accountService) : ControllerBase
+public class AccountController(IAccountService accountService, ILogger<AccountController> logger) : ControllerBase
 {
     private readonly IAccountService _accountService = accountService;
+    private readonly ILogger<AccountController> _logger = logger;
 
     /// <summary>
     /// Регистрация пользователя.
@@ -56,12 +58,13 @@ public class AccountController(IAccountService accountService) : ControllerBase
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных пользователя.</returns>
     [HttpGet]
-    [Route("get/user/info")]
+    [Route("get/current-user")]
     [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetCurrentUserInfoAsync(CancellationToken cancellationToken)
     {
         var user = await _accountService.GetCurrentUserAsync(cancellationToken);
 
-        return Ok(user);
+        return user is not null ? Ok(user) : NotFound();
     }
 }

@@ -16,10 +16,10 @@ public interface IUserRepository
     Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken);
 
     /// <summary>
-    /// 
+    /// Плучение всех пользователей.
     /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Коллекция объектов передачи данных пользователей.</returns>
     Task<IReadOnlyCollection<UserDto>> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
@@ -35,6 +35,6 @@ public interface IUserRepository
     /// </summary>
     /// <param name="dto">Объект передачи данных входа пользователя в систему.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Токен авторизации.</returns>
+    /// <returns>Объект передачи данных ответа запроса логина пользователя.</returns>
     Task<UserLoginResponseDto?> GetByLoginAsync(UserLoginRequestDto dto, CancellationToken cancellationToken);
 }

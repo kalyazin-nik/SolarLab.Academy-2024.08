@@ -11,21 +11,15 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
 {
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
-    #region Add
-
+    /// <inheritdoc />
     public async Task<Guid> AddAsync(CategoryCreateDto dto, CancellationToken cancellationToken)
     {
         return await _categoryRepository.AddAsync(dto, cancellationToken);
     }
 
-    #endregion
-
-    #region Get
-
+    /// <inheritdoc />
     public async Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _categoryRepository.GetByIdAsync(id, cancellationToken);
     }
-
-    #endregion
 }

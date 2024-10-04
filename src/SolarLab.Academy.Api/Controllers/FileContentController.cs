@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Services;
 using SolarLab.Academy.Contracts.FileContents;
 using System.Net;
@@ -10,12 +9,14 @@ namespace SolarLab.Academy.Api.Controllers
     /// Контроллер по работе с файлами.
     /// </summary>
     /// <param name="fileContentService">Сервис по работе с файлами.</param>
+    /// <param name="logger">Логгер <see cref="FileContentController"/></param>
     [ApiController]
     [Route("file")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public class FileContentController(IFileContentService fileContentService) : ControllerBase
+    public class FileContentController(IFileContentService fileContentService, ILogger<FileContentController> logger) : ControllerBase
     {
         private readonly IFileContentService _fileContentService = fileContentService;
+        private readonly ILogger<FileContentController> _logger = logger;
 
         /// <summary>
         /// Загрузка файла в систему.

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Serilog.Context;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Services;
 using SolarLab.Academy.Contracts.Advert;
 
@@ -9,14 +10,14 @@ namespace SolarLab.Academy.Api.Controllers;
 /// Контроллер по работе с объявлениями.
 /// </summary>
 /// <param name="advertService">Сервис по работе с объявлениями.</param>
+/// <param name="logger">Логгер <see cref="AdvertController"/></param>
 [ApiController]
 [Route("advert")]
 [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-public class AdvertController(IAdvertService advertService) : ControllerBase
+public class AdvertController(IAdvertService advertService, ILogger<AdvertController> logger) : ControllerBase
 {
     private readonly IAdvertService _advertService = advertService;
-
-    #region Add
+    private readonly ILogger<AdvertController> _logger = logger;
 
     /// <summary>
     /// Создание обяевления.
@@ -28,14 +29,11 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     [ProducesResponseType(typeof(Guid), (int)HttpStatusCode.Created)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateAdvertDto dto, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Создание объявления: {@Dto}", dto);
         var advertId = await _advertService.AddAsync(dto, cancellationToken);
 
         return StatusCode((int)HttpStatusCode.Created, advertId);
     }
-
-    #endregion
-
-    #region Get
 
     /// <summary>
     /// Получение коллекции объявлений по идентификатору категории.
@@ -48,6 +46,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Поиск объявлений по идентификатору категории: {@CategoryId}", categoryId);
         var shortAdvertDtos = await _advertService.GetByCategoryIdAsync(categoryId, cancellationToken);
 
         return shortAdvertDtos.Count > 0 ? Ok(shortAdvertDtos) : NoContent();
@@ -64,6 +63,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Поиск объявления по идентификатору: {@Id}", id);
         var advertDto = await _advertService.GetByIdAsync(id, cancellationToken);
 
         return advertDto is not null ? Ok(advertDto) : NoContent();
@@ -80,6 +80,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> GetBySearchRequestAsync([FromBody] SearchRequestAdvertDto request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Поиск объявлений по запросу: {@Request}", request);
         var advertDtos = await _advertService.GetBySearchRequestAsync(request, cancellationToken);
 
         return advertDtos.Count > 0 ? Ok(advertDtos) : NoContent();
@@ -96,10 +97,11 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> GetBySpecificationAsync([FromBody] SearchRequestAdvertDto request, CancellationToken cancellationToken)
     {
+        using var _ = LogContext.PushProperty("Request", request, true);
+        _logger.LogInformation("Поиск объявлений по спецификации");
+
         var advertDtos = await _advertService.GetBySpecificationAsync(request, cancellationToken);
 
         return advertDtos.Count > 0 ? Ok(advertDtos) : NoContent();
     }
-
-    #endregion
 }

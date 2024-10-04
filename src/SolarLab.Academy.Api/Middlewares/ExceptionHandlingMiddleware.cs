@@ -3,6 +3,8 @@ using System.Text.Unicode;
 using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Common;
 using Newtonsoft.Json;
+using Serilog.Context;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace SolarLab.Academy.Api.Middlewares;
 
@@ -12,6 +14,7 @@ namespace SolarLab.Academy.Api.Middlewares;
 /// <param name="next">Делегат потока обрабатыващий HTTP-запрос.</param>
 public class ExceptionHandlingMiddleware(RequestDelegate next)
 {
+    private const string LogTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode}";
     private readonly RequestDelegate _next = next ?? throw new ArgumentNullException(nameof(next));
     private static readonly JsonSerializerSettings _jsonSettings = new() { NullValueHandling = NullValueHandling.Ignore };
 
@@ -21,8 +24,9 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
     /// <param name="context">Контекст данных HTTP-запроса.</param>
     /// <param name="environment">Информация о среде окружения приложения.</param>
     /// <param name="serviceProvider">Объект предоставляющий пользовательскую поддержку другим объектам.</param>
+    /// <param name="logger">Логгер <see cref="ExceptionHandlingMiddleware"/></param>
     /// <returns>Задача, представляющая собой завершение обработки запроса.</returns>
-    public async Task Invoke(HttpContext context, IHostEnvironment environment, IServiceProvider serviceProvider)
+    public async Task Invoke(HttpContext context, IHostEnvironment environment, IServiceProvider serviceProvider, ILogger<ExceptionHandlingMiddleware> logger)
     {
         try
         {
@@ -30,6 +34,16 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         }
         catch (Exception exception)
         {
+            var statusCode = GetStatusCode(exception);
+
+            using(LogContext.PushProperty("Request.TraceId", context.TraceIdentifier))
+            using(LogContext.PushProperty("Request.UserName", context.User.Identity?.Name ?? string.Empty))
+            using(LogContext.PushProperty("Request.Connection", context.Connection.RemoteIpAddress?.ToString() ?? string.Empty))
+            using(LogContext.PushProperty("Request.TraceId", context.Request.GetDisplayUrl()))
+            {
+                logger.LogError(exception, LogTemplate, context.Request.Method, context.Request.Path.ToString(), statusCode);
+            }
+
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = GetStatusCode(exception);
 

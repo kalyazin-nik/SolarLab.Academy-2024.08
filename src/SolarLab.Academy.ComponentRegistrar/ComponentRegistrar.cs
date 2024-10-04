@@ -11,9 +11,11 @@ using SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Services;
 using SolarLab.Academy.AppServices.Contexts.User.Repository;
 using SolarLab.Academy.AppServices.Contexts.User.Services;
+using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.ComponentRegistrar.MapProfiles;
 using SolarLab.Academy.DataAccess.Repositories;
 using SolarLab.Academy.Infrastructure.Repository;
+using SolarLab.Academy.Infrastructure.Services.Logging;
 
 namespace SolarLab.Academy.ComponentRegistrar;
 
@@ -44,6 +46,8 @@ public static class ComponentRegistrar
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddSingleton<IMapper>(new Mapper(GetMapperConfiguration()));
+
+        services.AddScoped<IStructuralLoggingService, StructuralLoggingService>();
 
         return services;
     }

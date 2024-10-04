@@ -6,14 +6,16 @@ using System.Net;
 namespace SolarLab.Academy.Api.Controllers;
 
 /// <summary>
-/// Пользователи.
+/// Контроллер по работе с пользователями.
 /// </summary>
-[ApiController]
+/// <param name="userService">Сервис по работе с пользователями.</param>
+/// <param name="logger">Логгер <see cref="UserController"/></param>
 [Route("users")]
 [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-public class UserController(IUserService userService) : ControllerBase
+public class UserController(IUserService userService, ILogger<UserController> logger) : ControllerBase
 {
     private readonly IUserService _userService = userService;
+    private readonly ILogger<UserController> _logger = logger;
 
     /// <summary>
     /// Получение списка всех зарегистрированных пользоваателей.
@@ -41,7 +43,7 @@ public class UserController(IUserService userService) : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetUserAsync(Guid id, CancellationToken cancellationToken)
     {
-        var user = await _userService.GetUserAsync(id, cancellationToken);
+        var user = await _userService.GetUserByIdAsync(id, cancellationToken);
 
         return Ok(user);
     }

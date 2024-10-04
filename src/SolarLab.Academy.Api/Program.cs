@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using SolarLab.Academy.Api.Controllers;
 using SolarLab.Academy.Api.Middlewares;
 using SolarLab.Academy.ComponentRegistrar;
@@ -57,6 +58,12 @@ public class Program
         builder.Services.AddApplicationServices();
         builder.Services.AddDbContext<AcademyDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
+        //builder.Host.UseSerilog((context, provider, config) =>
+        //{
+        //    config.ReadFrom.Configuration(context.Configuration)
+        //        .Enrich.WithEnvironmentName();
+        //});
+
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -72,6 +79,7 @@ public class Program
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
+
         builder.Services.AddAuthorization();
 
         var app = builder.Build();

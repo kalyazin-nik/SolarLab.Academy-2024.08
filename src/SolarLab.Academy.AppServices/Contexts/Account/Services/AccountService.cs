@@ -23,16 +23,9 @@ public class AccountService(IUserRepository userRepository, IConfiguration confi
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     /// <inheritdoc />
-    public async Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken)
+    public async Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken)
     {
-        var claims = _httpContextAccessor.HttpContext.User.Claims;
-        var claimId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrWhiteSpace(claimId))
-        {
-            return null;
-        }
-
-        return await _userRepository.GetByIdAsync(Guid.Parse(claimId), cancellationToken);
+        return await _userRepository.RegisterAsync(dto, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -66,8 +59,15 @@ public class AccountService(IUserRepository userRepository, IConfiguration confi
     }
 
     /// <inheritdoc />
-    public async Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken)
+    public async Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken)
     {
-        return await _userRepository.RegisterAsync(dto, cancellationToken);
+        var claims = _httpContextAccessor.HttpContext.User.Claims;
+        var claimId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrWhiteSpace(claimId))
+        {
+            return null;
+        }
+
+        return await _userRepository.GetByIdAsync(Guid.Parse(claimId), cancellationToken);
     }
 }

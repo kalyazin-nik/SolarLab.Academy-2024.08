@@ -41,7 +41,7 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
     /// </summary>
     protected Specification()
     {
-        CompiledPredicateProvider = new Lazy<Func<TEntity, bool>>(PredicateExpression.Compile);
+        CompiledPredicateProvider = new Lazy<Func<TEntity, bool>>(() => PredicateExpression.Compile());
     }
 
     /// <inheritdoc />

@@ -7,8 +7,6 @@ namespace SolarLab.Academy.AppServices.Contexts.Categories.Services;
 /// </summary>
 public interface ICategoryService
 {
-    #region Add
-
     /// <summary>
     /// Создание категории.
     /// </summary>
@@ -17,10 +15,6 @@ public interface ICategoryService
     /// <returns>Идентификатор созданной категории.</returns>
     Task<Guid> AddAsync(CategoryCreateDto dto, CancellationToken cancellationToken);
 
-    #endregion
-
-    #region Get
-
     /// <summary>
     /// Получение категории по идентификатору.
     /// </summary>
@@ -28,6 +22,4 @@ public interface ICategoryService
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных категории, если категория будет найдена, иначе null.</returns>
     Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-
-    #endregion
 }

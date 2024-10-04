@@ -26,6 +26,7 @@ public class FileContentService(IFileContentRepository repository) : IFileConten
         return await _repository.UploadAsync(fileContentDto, cancellationToken);
     }
 
+    /// <inheritdoc />
     private static async Task<byte[]> GetBytesAsync(IFormFile file, CancellationToken cancellationToken)
     {
         using var memoryStream = new MemoryStream();

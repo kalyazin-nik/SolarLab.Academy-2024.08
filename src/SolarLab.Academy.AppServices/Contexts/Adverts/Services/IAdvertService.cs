@@ -1,5 +1,4 @@
-﻿using SolarLab.Academy.AppServices.Specifications;
-using SolarLab.Academy.Contracts.Advert;
+﻿using SolarLab.Academy.Contracts.Advert;
 
 namespace SolarLab.Academy.AppServices.Contexts.Adverts.Services;
 
@@ -8,8 +7,6 @@ namespace SolarLab.Academy.AppServices.Contexts.Adverts.Services;
 /// </summary>
 public interface IAdvertService
 {
-    #region Add
-
     /// <summary>
     /// Создает объявление по модели запроса.
     /// </summary>
@@ -17,10 +14,6 @@ public interface IAdvertService
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Идентификатор созданного объявления.</returns>
     Task<Guid> AddAsync(CreateAdvertDto dto, CancellationToken cancellationToken);
-
-    #endregion
-
-    #region Get
 
     /// <summary>
     /// Выполняет получение объявлений по идентификатору категории.
@@ -53,6 +46,4 @@ public interface IAdvertService
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Колеекция моделей объявлений в сокращенном виде.</returns>
     Task<IReadOnlyCollection<ShortAdvertDto>> GetBySpecificationAsync(SearchRequestAdvertDto request, CancellationToken cancellationToken);
-
-    #endregion
 }

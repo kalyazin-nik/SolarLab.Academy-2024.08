@@ -8,11 +8,12 @@ namespace SolarLab.Academy.AppServices.Contexts.Account.Services;
 public interface IAccountService
 {
     /// <summary>
-    /// Получить текущего пользователя.
+    /// Регистрация пользователя.
     /// </summary>
+    /// <param name="dto">Объект передачи данных регистрации пользователя.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных пользователя.</returns>
-    Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken);
+    Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken);
 
     /// <summary>
     /// Вход в систему.
@@ -23,10 +24,9 @@ public interface IAccountService
     Task<string> LoginAsync(UserLoginRequestDto dto, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Регистрация пользователя.
+    /// Получить текущего пользователя.
     /// </summary>
-    /// <param name="dto">Объект передачи данных регистрации пользователя.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных пользователя.</returns>
-    Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken);
+    Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken);
 }

@@ -10,13 +10,15 @@ namespace SolarLab.Academy.Api.Controllers;
 /// Контроллер по работе с категорией.
 /// </summary>
 /// <param name="categoryService">Сервис по работе с категорией.</param>
+/// <param name="logger">Логгер <see cref="CategoryController"/></param>
 [Authorize]
 [ApiController]
 [Route("category")]
 [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-public class CategoryController(ICategoryService categoryService) : ControllerBase
+public class CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger) : ControllerBase
 {
     private readonly ICategoryService _categoryService = categoryService;
+    private readonly ILogger<CategoryController> _logger = logger;
 
     /// <summary>
     /// Создание категории.
