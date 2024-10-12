@@ -15,7 +15,7 @@ public interface IAdvertRepository
     /// <param name="dto">Модель запроса.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Идентификатор созданного объявления.</returns>
-    Task<Guid> AddAsync(CreateAdvertDto dto, CancellationToken cancellationToken);
+    Task<Guid> CreateAsync(CreateAdvertDto dto, CancellationToken cancellationToken);
 
     /// <summary>
     /// Выполняет получение объявлений по идентификатору категории.

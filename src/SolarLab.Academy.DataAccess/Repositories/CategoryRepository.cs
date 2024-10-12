@@ -18,8 +18,6 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
     private readonly IRepository<Category, AcademyDbContext> _repository = repository;
     private readonly IMapper _mapper = mapper;
 
-    #region Add
-
     /// <inheritdoc />
     public async Task<Guid> AddAsync(CategoryCreateDto dto, CancellationToken cancellationToken)
     {
@@ -29,9 +27,13 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
         return category.Id;
     }
 
-    #endregion
-
-    #region Get
+    public CategoryDto? GetById(Guid id)
+    {
+        return _repository.GetAll()
+            .Where(x => x.Id == id)
+            .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefault();
+    }
 
     /// <inheritdoc />
     public async Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -41,7 +43,4 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(cancellationToken);
     }
-
-    #endregion
-
 }

@@ -11,7 +11,7 @@ namespace SolarLab.Academy.Api.Controllers;
 /// </summary>
 /// <param name="categoryService">Сервис по работе с категорией.</param>
 /// <param name="logger">Логгер <see cref="CategoryController"/></param>
-[Authorize]
+// [Authorize]
 [ApiController]
 [Route("category")]
 [ProducesResponseType((int)HttpStatusCode.InternalServerError)]

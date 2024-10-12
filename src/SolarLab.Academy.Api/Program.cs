@@ -9,6 +9,7 @@ using SolarLab.Academy.Api.Middlewares;
 using SolarLab.Academy.ComponentRegistrar;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Categories;
+using SolarLab.Academy.Contracts.Error;
 using SolarLab.Academy.Contracts.FileContents;
 using SolarLab.Academy.Contracts.Order;
 using SolarLab.Academy.Contracts.User;
@@ -42,7 +43,9 @@ public class Program
         typeof(AdvertController),
         typeof(CategoryController),
         typeof(FileContentController),
-        typeof(UserController)
+        typeof(UserController),
+        typeof(BadRequestError),
+        typeof(DevelopmentError)
     ];
 
     /// <summary>
@@ -54,16 +57,12 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
+        
         builder.Services.AddSwaggerGen(ConfigureSwaggerOptions);
         builder.Services.AddApplicationServices();
         builder.Services.AddDbContext<AcademyDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
-
-        //builder.Host.UseSerilog((context, provider, config) =>
-        //{
-        //    config.ReadFrom.Configuration(context.Configuration)
-        //        .Enrich.WithEnvironmentName();
-        //});
-
+        builder.Services.AddValidator();
+        builder.Host.AddSerilog();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -79,7 +78,6 @@ public class Program
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
-
         builder.Services.AddAuthorization();
 
         var app = builder.Build();

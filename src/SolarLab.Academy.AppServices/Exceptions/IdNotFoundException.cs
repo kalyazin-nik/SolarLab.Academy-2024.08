@@ -3,10 +3,10 @@
 namespace SolarLab.Academy.AppServices.Exceptions;
 
 /// <summary>
-/// Исключение. Сущность не была найдена.
+/// Исключение. Идентификатор не найден.
 /// </summary>
 /// <param name="validationResult">Резальтат выполнения валидации.</param>
-public class EntityNotFoundException(ValidationResult validationResult) : Exception(), IApiException
+public class IdNotFoundException(ValidationResult validationResult) : Exception(), IApiException
 {
     /// <inheritdoc />
     public ValidationResult ValidationResult { get; set; } = validationResult;
@@ -15,5 +15,5 @@ public class EntityNotFoundException(ValidationResult validationResult) : Except
     public string Type => "https://tools.ietf.org/html/rfc9110#section-15.5.5";
 
     /// <inheritdoc />
-    public string Title => "Запрашиваемая сущность не найдена.";
+    public string Title { get; } = "Идентификатор запрашиваемой сущности не найден.";
 }

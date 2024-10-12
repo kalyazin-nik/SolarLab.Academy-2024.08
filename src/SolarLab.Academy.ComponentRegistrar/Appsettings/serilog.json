@@ -1,0 +1,29 @@
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft.EntityFrameworkCore": "Warning"
+      }
+    },
+    "Enrich": [
+      "FromLogContext",
+      "WithThreadId"
+    ],
+    "WriteTo": [
+      {
+        "Name": "Console"
+      },
+      {
+        "Name": "Debug"
+      },
+      {
+        "Name": "Elasticsearch",
+        "Args": {
+          "nodeUris": "http://localhost:9200",
+          "indexFormat": "sl-academy-2024.08-{0:yyyy.MM.dd}"
+        }
+      }
+    ]
+  }
+}

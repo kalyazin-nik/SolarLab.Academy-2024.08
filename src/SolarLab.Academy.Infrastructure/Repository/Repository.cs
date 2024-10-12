@@ -18,21 +18,20 @@ public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
         DbSet = DbContext.Set<TEntity>();
     }
 
-    #region Add
-
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
         await DbSet.AddAsync(entity, cancellationToken);
         await DbContext.SaveChangesAsync(cancellationToken);
     }
 
-    #endregion
-
-    #region Get
-
     public IQueryable<TEntity> GetAll()
     {
         return DbSet;
+    }
+
+    public TEntity? GetById(Guid id)
+    {
+        return DbSet.Find(id);
     }
 
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -44,10 +43,6 @@ public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
     {
         return DbSet.Where(predicate);
     }
-
-    #endregion
-
-    #region Remove
 
     public async Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -68,15 +63,9 @@ public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
         await DbContext.SaveChangesAsync(cancellationToken);
     }
 
-    #endregion
-
-    #region Update
-
     public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)
     {
         DbSet.Update(entity);
         await DbContext.SaveChangesAsync(cancellationToken);
     }
-
-    #endregion
 }

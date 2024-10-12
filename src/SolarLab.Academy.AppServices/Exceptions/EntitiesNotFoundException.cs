@@ -1,12 +1,19 @@
-﻿namespace SolarLab.Academy.AppServices.Exceptions;
+﻿using FluentValidation.Results;
 
-public class EntitiesNotFoundException : HumanReadableException
+namespace SolarLab.Academy.AppServices.Exceptions;
+
+/// <summary>
+/// Исключение. Сущности не были найдены.
+/// </summary>
+/// <param name="validationResult">Резальтат выполнения валидации.</param>
+public class EntitiesNotFoundException(ValidationResult validationResult) : Exception(), IApiException
 {
-    public EntitiesNotFoundException(string humanReadableMessage) : base(humanReadableMessage)
-    {
-    }
+    /// <inheritdoc />
+    public ValidationResult ValidationResult { get; set; } = validationResult;
 
-    public EntitiesNotFoundException(string message, string humanReadableMessage) : base(message, humanReadableMessage)
-    {
-    }
+    /// <inheritdoc />
+    public string Type => "https://tools.ietf.org/html/rfc9110#section-15.5.5";
+
+    /// <inheritdoc />
+    public string Title => "Запрашиваемые сущности не найдены.";
 }

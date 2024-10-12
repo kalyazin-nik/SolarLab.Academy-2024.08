@@ -5,6 +5,7 @@ using SolarLab.Academy.AppServices.Contexts.Account.Services;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Builders;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Repositories;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Services;
+using SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Sevice;
 using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
 using SolarLab.Academy.AppServices.Contexts.Categories.Services;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
@@ -42,6 +43,7 @@ public static class ComponentRegistrar
         services.AddScoped<IFileContentRepository, FileContentRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
+        services.AddScoped<IAdvertValidatorService, AdvertValidatorService>();
         services.AddScoped<IAdvertSpecificationBuilder, AdvertSpecificationBuilder>();
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -41,6 +41,8 @@ public interface IRepository<TEntity, TContext>
     /// <returns>Сущность <see cref="TEntity"/></returns>
     Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
+    TEntity? GetById(Guid id);
+
     /// <summary>
     /// Возвращает сущности <see cref="TEntity"/> согласно условию.
     /// </summary>

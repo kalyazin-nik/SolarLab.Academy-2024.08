@@ -1,10 +1,9 @@
 ﻿using System.Net;
-using System.Text.Unicode;
-using SolarLab.Academy.AppServices.Exceptions;
-using SolarLab.Academy.Contracts.Common;
+using Microsoft.AspNetCore.Http.Extensions;
 using Newtonsoft.Json;
 using Serilog.Context;
-using Microsoft.AspNetCore.Http.Extensions;
+using SolarLab.Academy.AppServices.Exceptions;
+using SolarLab.Academy.Contracts.Error;
 
 namespace SolarLab.Academy.Api.Middlewares;
 
@@ -36,50 +35,76 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         {
             var statusCode = GetStatusCode(exception);
 
-            using(LogContext.PushProperty("Request.TraceId", context.TraceIdentifier))
-            using(LogContext.PushProperty("Request.UserName", context.User.Identity?.Name ?? string.Empty))
-            using(LogContext.PushProperty("Request.Connection", context.Connection.RemoteIpAddress?.ToString() ?? string.Empty))
-            using(LogContext.PushProperty("Request.TraceId", context.Request.GetDisplayUrl()))
+            using (LogContext.PushProperty("Request.TraceId", context.TraceIdentifier))
+            using (LogContext.PushProperty("Request.UserName", context.User.Identity?.Name ?? string.Empty))
+            using (LogContext.PushProperty("Request.Connection", context.Connection.RemoteIpAddress?.ToString() ?? string.Empty))
+            using (LogContext.PushProperty("Request.TraceId", context.Request.GetDisplayUrl()))
             {
                 logger.LogError(exception, LogTemplate, context.Request.Method, context.Request.Path.ToString(), statusCode);
             }
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = GetStatusCode(exception);
+            context.Response.StatusCode = statusCode;
 
             var apiError = CreateApiError(exception, context, environment);
             await context.Response.WriteAsync(JsonConvert.SerializeObject(apiError, _jsonSettings));
         }
     }
 
-    private static ApiError CreateApiError(Exception exception, HttpContext context, IHostEnvironment environment)
+    private static IApiError CreateApiError(Exception exception, HttpContext context, IHostEnvironment environment)
     {
-        var traceID = context.TraceIdentifier;
+        var traceId = context.TraceIdentifier;
         var statusCode = GetStatusCode(exception);
-
-        if (environment.IsDevelopment())
-        {
-            return new ApiError(exception.Message, exception.StackTrace ?? string.Empty, traceID, statusCode);
-        }
 
         return exception switch
         {
-            EntitiesNotFoundException ex => new HumanReadableError("Пользователи не были добавлены.", null!, traceID, statusCode, ex.HumanReadableMessage),
-            EntityNotFoundException => new ApiError("Сущность не найдена.", null!, traceID, statusCode),
-            _ => new ApiError("Произошла непредвиденная ошибка.", null!, traceID, statusCode)
+            BadRequestException ex => GetError<BadRequestException, BadRequestError>(ex, statusCode, traceId),
+            EntitiesNotFoundException ex => GetError<EntitiesNotFoundException, NotFoundError>(ex, statusCode, traceId),
+            EntityNotFoundException ex => GetError<EntityNotFoundException, NotFoundError>(ex, statusCode, traceId),
+            IdNotFoundException ex => GetError<IdNotFoundException, NotFoundError>(ex, statusCode,  traceId),
+            _ => environment.IsDevelopment() ? new DevelopmentError
+            {
+                Message = exception.Message,
+                Description = exception.StackTrace,
+                Code = statusCode,
+                TraceID = traceId
+            } : new InternalServerError
+            {
+                Title = "Произошла непредвиденная ошибка.",
+                Message = "Пожалуйста, сообщите о данной ошибке разработчику по электронной почте kalyazin.nik@yandex.ru или в телеграм @kalyazin_nik. " +
+                    "В сообщении пришлите скрин экрана данной ошибки.",
+                Route = string.Format($"{context.Request.Scheme}://{context.Request.Host.Value}{context.Request.Path.Value}{context.Request.QueryString.Value}"),
+                Status = statusCode,
+                TraceId = traceId
+            }
         };
     }
 
+    private static TError GetError<TException, TError>(TException exception, int statusCode, string? traceId)
+        where TException : IApiException
+        where TError : IApiProcessedError, new()
+    {
+        return new()
+        {
+            Type = exception.Type,
+            Title = exception.Title,
+            StatusCode = statusCode,
+            Errors = exception.ValidationResult.ToDictionary(),
+            TraceId = traceId
+        };
+    }
+
+
     private static int GetStatusCode(Exception exception)
     {
-        var statusCode =  exception switch
+        return (int)(exception switch
         {
             ArgumentException => HttpStatusCode.BadRequest,
+            BadRequestException => HttpStatusCode.BadRequest,
             EntityNotFoundException => HttpStatusCode.NotFound,
             EntitiesNotFoundException => HttpStatusCode.NotFound,
+            IdNotFoundException => HttpStatusCode.NotFound,
             _ => HttpStatusCode.InternalServerError
-        };
-
-        return (int)statusCode;
+        });
     }
 }

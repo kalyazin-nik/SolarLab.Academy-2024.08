@@ -22,4 +22,6 @@ public interface ICategoryRepository
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Категория. Вернётся null, если категория не будет найдена.</returns>
     Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+    CategoryDto? GetById(Guid id);
 }

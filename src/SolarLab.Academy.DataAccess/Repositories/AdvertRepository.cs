@@ -19,20 +19,14 @@ public class AdvertRepository(IRepository<Advert, AcademyDbContext> repository, 
     private readonly IRepository<Advert, AcademyDbContext> _repository = repository;
     private readonly IMapper _mapper = mapper;
 
-    #region Add
-
     /// <inheritdoc />
-    public async Task<Guid> AddAsync(CreateAdvertDto dto, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAsync(CreateAdvertDto dto, CancellationToken cancellationToken)
     {
         var advert = _mapper.Map<CreateAdvertDto, Advert>(dto);
         await _repository.AddAsync(advert, cancellationToken);
 
         return advert.Id;
     }
-
-    #endregion
-
-    #region Get
 
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<ShortAdvertDto>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
@@ -105,6 +99,4 @@ public class AdvertRepository(IRepository<Advert, AcademyDbContext> repository, 
             .ProjectTo<ShortAdvertDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
     }
-
-    #endregion
 }

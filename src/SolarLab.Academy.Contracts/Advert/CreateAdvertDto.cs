@@ -8,20 +8,25 @@ public class CreateAdvertDto
     /// <summary>
     /// Наименование.
     /// </summary>
-    public string Name { get; set; } = null!;
+    // [Required]
+    public string? Name { get; set; }
 
     /// <summary>
     /// Описание.
     /// </summary>
-    public string Description { get; set; } = null!;
-
-    /// <summary>
-    /// Идентификатор категории.
-    /// </summary>
-    public Guid CategoryID { get; set; }
+    // [Required]
+    public string? Description { get; set; }
 
     /// <summary>
     /// Цена.
     /// </summary>
-    public decimal Price { get; set; }
+    // [Required]
+    public decimal? Price { get; set; }
+
+    /// <summary>
+    /// Идентификатор категории.
+    /// </summary>
+    // [Required]
+    // [CategoryValidation]
+    public Guid? CategoryId { get; set; }
 }
