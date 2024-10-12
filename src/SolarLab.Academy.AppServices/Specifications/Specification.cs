@@ -9,8 +9,6 @@ namespace SolarLab.Academy.AppServices.Specifications;
 /// <typeparam name="TEntity">Тип сущности.</typeparam>
 public abstract class Specification<TEntity> : ISpecification<TEntity>
 {
-    #region Field
-
     /// <summary>
     /// Спецификация со значением истины для любого входного параметра.
     /// </summary>
@@ -21,10 +19,6 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
     /// </summary>
     public static readonly Specification<TEntity> False = new ExpressionSpecification<TEntity>(_ => false);
 
-    #endregion
-
-    #region Property
-
     /// <summary>
     /// Провайдер скомилированного выражения предиката.
     /// Необходим чтобы не компилировать дерево каждый раз при проверке объекта.
@@ -33,8 +27,6 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
 
     /// <inheritdoc />
     public abstract Expression<Func<TEntity, bool>> PredicateExpression { get; }
-
-    #endregion
 
     /// <summary>
     /// Инициализирует экземпляр <see cref="Specification{TEntity}"/>.
@@ -61,8 +53,6 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
     {
         return new ExpressionSpecification<TEntity>(predicate);
     }
-
-    #region Operator
 
     /// <summary>
     /// Оператор приведения типа к дереву выражений.
@@ -97,6 +87,4 @@ public abstract class Specification<TEntity> : ISpecification<TEntity>
     {
         return current.Not();
     }
-
-    #endregion
 }

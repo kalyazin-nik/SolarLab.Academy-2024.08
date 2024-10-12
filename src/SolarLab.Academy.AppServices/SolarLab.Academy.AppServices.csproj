@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SolarLab.Academy.Contracts\SolarLab.Academy.Contracts.csproj" />
-    <ProjectReference Include="..\SolarLab.Academy.Domain\SolarLab.Academy.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SolarLab.Academy.AppServices.Contexts.Account.Services;
-using SolarLab.Academy.AppServices.Contexts.Adverts.Builders;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Repositories;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Services;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Sevice;
@@ -15,6 +14,7 @@ using SolarLab.Academy.AppServices.Contexts.User.Services;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.ComponentRegistrar.MapProfiles;
 using SolarLab.Academy.DataAccess.Repositories;
+using SolarLab.Academy.Infrastructure.Adverts.Builders;
 using SolarLab.Academy.Infrastructure.Repository;
 using SolarLab.Academy.Infrastructure.Services.Logging;
 

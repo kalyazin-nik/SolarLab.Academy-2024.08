@@ -2,7 +2,6 @@
 using SolarLab.Academy.AppServices.Contexts.Adverts.Repositories;
 using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
 using SolarLab.Academy.AppServices.Exceptions;
-using System.Threading;
 
 namespace SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Sevice;
 

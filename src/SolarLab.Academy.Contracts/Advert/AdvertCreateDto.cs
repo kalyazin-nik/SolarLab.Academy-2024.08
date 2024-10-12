@@ -3,7 +3,7 @@
 /// <summary>
 /// Объект передачи данных объявления.
 /// </summary>
-public class CreateAdvertDto
+public class AdvertCreateDto
 {
     /// <summary>
     /// Наименование.

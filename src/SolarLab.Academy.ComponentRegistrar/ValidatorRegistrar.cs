@@ -9,7 +9,8 @@ public static class ValidatorRegistrar
 {
     public static IServiceCollection AddValidator(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssemblyContaining<CreateAdvertValidator>();
+        services.AddValidatorsFromAssemblyContaining<AdvertCreateValidator>();
+        services.AddValidatorsFromAssemblyContaining<AdvertSearchRequestValidator>();
 
         services.AddFluentValidationAutoValidation();
 

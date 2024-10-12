@@ -8,7 +8,7 @@ public class Advert : EntityBase
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public override Guid Id { get; set; }
 
     /// <summary>
     /// Дата создания.

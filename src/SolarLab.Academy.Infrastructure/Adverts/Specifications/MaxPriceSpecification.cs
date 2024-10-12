@@ -1,8 +1,8 @@
-﻿using SolarLab.Academy.AppServices.Specifications;
+﻿using System.Linq.Expressions;
+using SolarLab.Academy.AppServices.Specifications;
 using SolarLab.Academy.Domain;
-using System.Linq.Expressions;
 
-namespace SolarLab.Academy.AppServices.Contexts.Adverts.Specifications;
+namespace SolarLab.Academy.Infrastructure.Adverts.Specifications;
 
 /// <summary>
 /// Спецификация поиска объявлений не выше максимальной цены.

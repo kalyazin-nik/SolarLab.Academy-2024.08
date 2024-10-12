@@ -13,8 +13,6 @@ public interface IRepository<TEntity, TContext>
     where TEntity : EntityBase
     where TContext : DbContext
 {
-    #region Add
-
     /// <summary>
     /// Добваление.
     /// </summary>
@@ -22,10 +20,6 @@ public interface IRepository<TEntity, TContext>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns></returns>
     Task AddAsync(TEntity entity, CancellationToken cancellationToken);
-
-    #endregion
-
-    #region Get
 
     /// <summary>
     /// Возвращает все сущности <see cref="TEntity"/>.
@@ -39,9 +33,7 @@ public interface IRepository<TEntity, TContext>
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Сущность <see cref="TEntity"/></returns>
-    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-
-    TEntity? GetById(Guid id);
+    Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Возвращает сущности <see cref="TEntity"/> согласно условию.
@@ -50,17 +42,13 @@ public interface IRepository<TEntity, TContext>
     /// <returns></returns>
     IQueryable<TEntity> GetByPredicate(Expression<Func<TEntity, bool>> predicate);
 
-    #endregion
-
-    #region Remove
-
     /// <summary>
     /// Удаление.
     /// </summary>
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns></returns>
-    Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken);
+    Task RemoveAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление.
@@ -70,10 +58,6 @@ public interface IRepository<TEntity, TContext>
     /// <returns></returns>
     Task RemoveAsync(TEntity entity, CancellationToken cancellationToken);
 
-    #endregion
-
-    #region Update
-
     /// <summary>
     /// Обновление.
     /// </summary>
@@ -81,6 +65,4 @@ public interface IRepository<TEntity, TContext>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns></returns>
     Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
-
-    #endregion
 }

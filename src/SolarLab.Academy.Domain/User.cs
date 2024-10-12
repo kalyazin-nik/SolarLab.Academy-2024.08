@@ -8,7 +8,7 @@ public class User : EntityBase
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid Id { get; set; }
+    public override Guid Id { get; set; }
 
     /// <summary>
     /// Имя пользователя.

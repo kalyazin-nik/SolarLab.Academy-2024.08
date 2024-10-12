@@ -3,12 +3,12 @@ using SolarLab.Academy.Contracts.Advert;
 
 namespace SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Models;
 
-public class CreateAdvertValidator : AbstractValidator<CreateAdvertDto>
+public class AdvertCreateValidator : AbstractValidator<AdvertCreateDto>
 {
     private const string Required = "Поле '{0}' обязательно.";
     private const string NotEmpty = "{0} не может быть пустым.";
 
-    public CreateAdvertValidator()
+    public AdvertCreateValidator()
     {
         RuleFor(x => x.Name)
             .NotNull().WithMessage(string.Format(Required, "name"))

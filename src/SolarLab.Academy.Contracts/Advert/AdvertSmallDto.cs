@@ -3,7 +3,7 @@
 /// <summary>
 /// Сокращенный объект передачи данных объявления.
 /// </summary>
-public class ShortAdvertDto
+public class AdvertSmallDto
 {
     /// <summary>
     /// Идентификатор.

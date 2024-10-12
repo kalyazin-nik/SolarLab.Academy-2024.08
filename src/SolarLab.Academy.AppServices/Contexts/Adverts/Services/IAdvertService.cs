@@ -13,7 +13,7 @@ public interface IAdvertService
     /// <param name="dto">Модель запроса.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Идентификатор созданного объявления.</returns>
-    Task<Guid> CreateAsync(CreateAdvertDto dto, CancellationToken cancellationToken);
+    Task<Guid> CreateAsync(AdvertCreateDto dto, CancellationToken cancellationToken);
 
     /// <summary>
     /// Выполняет получение объявлений по идентификатору категории.
@@ -21,7 +21,7 @@ public interface IAdvertService
     /// <param name="categoryId">Идентификатор категории.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Колеекция сокращенных моделей объявления.</returns>
-    Task<IReadOnlyCollection<ShortAdvertDto>> GetByCategoryIdAsync(Guid? categoryId, CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<AdvertSmallDto>> GetByCategoryIdAsync(Guid? categoryId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получает объявление по идентификатору.
@@ -29,7 +29,7 @@ public interface IAdvertService
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Модель объявления.</returns>
-    Task<AdvertDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<AdvertDto> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Выполняет получение объявлений по поисковому запросу.
@@ -37,13 +37,5 @@ public interface IAdvertService
     /// <param name="request">Тело запроса.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Колеекция моделей объявлений в сокращенном виде.</returns>
-    Task<IReadOnlyCollection<ShortAdvertDto>> GetBySearchRequestAsync(SearchRequestAdvertDto request, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Выполняет получение объявлений по спецификации запроса.
-    /// </summary>
-    /// <param name="request">Тело запроса.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Колеекция моделей объявлений в сокращенном виде.</returns>
-    Task<IReadOnlyCollection<ShortAdvertDto>> GetBySpecificationAsync(SearchRequestAdvertDto request, CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<AdvertSmallDto>> GetBySearchRequestAsync(AdvertSearchRequestDto request, CancellationToken cancellationToken);
 }

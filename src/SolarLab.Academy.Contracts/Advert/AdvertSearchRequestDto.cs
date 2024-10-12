@@ -3,7 +3,7 @@
 /// <summary>
 /// Объект передачи данных поискового запроса объявления.
 /// </summary>
-public class SearchRequestAdvertDto
+public class AdvertSearchRequestDto
 {
     /// <summary>
     /// Поисковой запрос.

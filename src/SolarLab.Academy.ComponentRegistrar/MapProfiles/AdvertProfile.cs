@@ -10,9 +10,9 @@ public class AdvertProfile : Profile
     {
         CreateMap<Advert, AdvertDto>(MemberList.None);
 
-        CreateMap<Advert, ShortAdvertDto>(MemberList.None);
+        CreateMap<Advert, AdvertSmallDto>(MemberList.None);
 
-        CreateMap<CreateAdvertDto, Advert>(MemberList.None)
+        CreateMap<AdvertCreateDto, Advert>(MemberList.None)
             .ForMember(x => x.CreatedAt, map => map.MapFrom(x => DateTime.UtcNow))
             .ForMember(x => x.Disabled, map => map.MapFrom(x => false));
     }
