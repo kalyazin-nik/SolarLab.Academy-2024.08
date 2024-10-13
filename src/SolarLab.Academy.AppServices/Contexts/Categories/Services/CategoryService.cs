@@ -22,9 +22,4 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
     {
         return await _categoryRepository.GetByIdAsync(id, cancellationToken);
     }
-
-    public CategoryDto? GetById(Guid id)
-    {
-        return _categoryRepository.GetById(id);
-    }
 }

@@ -32,7 +32,7 @@ public class AdvertRepository(
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<AdvertSmallDto>> GetByCategoryIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<AdvertSmallDto>?> GetByCategoryIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _repository
             .GetByPredicate(x => x.CategoryId == id)
@@ -42,14 +42,18 @@ public class AdvertRepository(
     }
 
     /// <inheritdoc />
-    public async Task<AdvertDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<AdvertDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var advert = await _repository.GetByIdAsync(id, cancellationToken);
-        return _mapper.Map<Advert, AdvertDto>(advert);
+        if (await _repository.GetByIdAsync(id, cancellationToken) is Advert advert)
+        {
+            return _mapper.Map<Advert, AdvertDto>(advert);
+        }
+
+        return null;
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<AdvertSmallDto>> GetBySearchRequestAsync(AdvertSearchRequestDto request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<AdvertSmallDto>?> GetBySearchRequestAsync(AdvertSearchRequestDto request, CancellationToken cancellationToken)
     {
         var specification = _advertSpecificationBuilder.Build(request);
         var skip = request.Skip;

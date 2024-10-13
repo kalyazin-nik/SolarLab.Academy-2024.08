@@ -1,59 +1,50 @@
-﻿using FluentValidation.Results;
-using SolarLab.Academy.AppServices.Contexts.Adverts.Repositories;
-using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
+﻿using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
 using SolarLab.Academy.AppServices.Exceptions;
+using SolarLab.Academy.Contracts.Advert;
+using SolarLab.Academy.Contracts.Categories;
 
 namespace SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Sevice;
 
-public class AdvertValidatorService(IAdvertRepository advertRepository, ICategoryRepository categoryRepository) : IAdvertValidatorService
+public class AdvertValidatorService(ICategoryRepository categoryRepository) : IAdvertValidatorService
 {
-    private readonly IAdvertRepository _advertRepository = advertRepository;
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
-    private readonly string _advertId = "id";
-    private readonly string _categoryId = "categoryId";
-    private readonly string _nullError = "Поле '{0}' не может быть пустым.";
-    private readonly string _emptyError = "Поле '{0}' не может иметь вид по умолчанию '{1}'.";
-    private readonly string _advertNotFoundError = "Объявление не найдено.";
-    private readonly string _categoryNotFoundError = "Категория не найдена.";
-
-    public async Task ValidateCategoryIdForAdvertAsync(Guid? id, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_Collection(IReadOnlyCollection<AdvertSmallDto>? collection)
     {
-        await ValidateId(id, _categoryId, _nullError, _emptyError, _categoryNotFoundError, cancellationToken);
+        return collection is not null && collection.Count > 0 ? collection : throw new EntitiesNotFoundException("Response", "Объявления не найдены.");
     }
 
-    public async Task ValidateIdForAdvertAsync(Guid? id, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public AdvertDto AfterExecuteRequestValidate_Advert(AdvertDto? advert)
     {
-        await ValidateId(id, _advertId, _nullError, _emptyError, _advertNotFoundError, cancellationToken);
+        return advert is not null ? advert : throw new EntityNotFoundException("Response", "Объявление на найдено.");
     }
 
-    private async Task ValidateId(Guid? id, string propertyName, string nullError, string emptyError, string notFoundError,  CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public Guid BeforeExecuteRequestValidate_Id(Guid? id)
     {
+        var propertyName = "Id";
+
         if (id.HasValue)
         {
-            if (id.Value == Guid.Empty)
-            {
-                ThrowBadRequestException(propertyName, string.Format(emptyError, propertyName, Guid.Empty));
-            }
-            else if (await _categoryRepository.GetByIdAsync(id.Value, cancellationToken) is null)
-            {
-                ThrowIdNotFoundException(propertyName, notFoundError);
-            }
+            return id.Value != Guid.Empty ? id.Value : throw new BadRequestException(propertyName, $"Поле '{propertyName}' не может иметь вид по умолчанию '{Guid.Empty}'.");
         }
         else
         {
-            ThrowBadRequestException(propertyName, string.Format(nullError, propertyName));
+            throw new BadRequestException(propertyName, $"Поле '{propertyName}' не может быть пустым.");
         }
     }
 
-    private static void ThrowBadRequestException(string propertyName, string errorMessage)
+    /// <inheritdoc />
+    public async Task<bool> BeforExecuteRequestValidate_ExistCategoryIdAsync(Guid? id, CancellationToken cancellationToken)
     {
-        var error = new ValidationResult { Errors = [new ValidationFailure(propertyName, errorMessage)] };
-        throw new BadRequestException(error);
-    }
-    private static void ThrowIdNotFoundException(string propertyName, string errorMessage)
-    {
-        var error = new ValidationResult { Errors = [new ValidationFailure(propertyName, errorMessage)] };
-        throw new IdNotFoundException(error);
+        id = BeforeExecuteRequestValidate_Id(id);
+        if (await _categoryRepository.GetByIdAsync(id.Value, cancellationToken) is not null)
+        {
+            return true;
+        }
+
+        throw new EntityNotFoundException("CategoryId", "Категория не существует.");
     }
 }

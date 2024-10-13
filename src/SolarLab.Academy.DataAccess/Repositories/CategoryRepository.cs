@@ -27,14 +27,6 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
         return category.Id;
     }
 
-    public CategoryDto? GetById(Guid id)
-    {
-        return _repository.GetAll()
-            .Where(x => x.Id == id)
-            .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefault();
-    }
-
     /// <inheritdoc />
     public async Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {

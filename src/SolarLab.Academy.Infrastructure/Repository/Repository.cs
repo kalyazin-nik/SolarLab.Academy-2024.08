@@ -32,9 +32,9 @@ public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
     }
 
     // <inheridoc />
-    public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await DbSet.Where(x => x.Id == id).FirstAsync();
+        return await DbSet.Where(x => x.Id == id).FirstOrDefaultAsync();
     }
 
     // <inheridoc />
@@ -47,7 +47,7 @@ public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
     public async Task RemoveAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await GetByIdAsync(id, cancellationToken);
-        DbSet.Remove(entity);
+        DbSet.Remove(entity!);
         await DbContext.SaveChangesAsync(cancellationToken);
     }
 

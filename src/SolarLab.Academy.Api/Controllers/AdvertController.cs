@@ -25,6 +25,7 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     /// <returns>Идентификатор объявления.</returns>
     [HttpPost("create")]
     [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Guid), (int)HttpStatusCode.Created)]
     public async Task<IActionResult> CreateAsync([FromBody] AdvertCreateDto dto, CancellationToken cancellationToken)
     {
@@ -38,8 +39,8 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Коллекция объектов передачи данных объявлений в сокращенном виде.</returns>
     [HttpGet("getByCategory")]
-    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(IReadOnlyCollection<AdvertDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetByCategoryIdAsync(Guid? id, CancellationToken cancellationToken)
     {
@@ -53,10 +54,10 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных объявления.</returns>
     [HttpGet("get")]
-    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(AdvertDto), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetByIdAsync(Guid? id, CancellationToken cancellationToken)
     {
         return Ok(await _advertService.GetByIdAsync(id, cancellationToken));
     }
@@ -68,8 +69,8 @@ public class AdvertController(IAdvertService advertService) : ControllerBase
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Колеекция моделей объявлений в сокращенном виде.</returns>
     [HttpPost("getBySearchRequest")]
-    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(List<AdvertSmallDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetBySearchRequestAsync([FromBody] AdvertSearchRequestDto request, CancellationToken cancellationToken)
     {
