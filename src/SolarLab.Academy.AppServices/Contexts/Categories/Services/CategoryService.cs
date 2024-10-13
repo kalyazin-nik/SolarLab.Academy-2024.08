@@ -32,7 +32,7 @@ public class CategoryService(
 
         if (createCategory.ParentId.HasValue)
         {
-            await _categoryValidatorService.BeforExecuteRequestValidate_ExistCategoryIdAsync(createCategory.ParentId, cancellationToken);
+            await _categoryValidatorService.BeforExecuteRequestValidate_ExistCategoryAsync(createCategory.ParentId, cancellationToken);
         }
 
         return await _categoryRepository.CreateAsync(createCategory, cancellationToken);

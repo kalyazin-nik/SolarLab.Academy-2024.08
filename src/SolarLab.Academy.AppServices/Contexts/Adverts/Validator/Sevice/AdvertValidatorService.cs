@@ -37,7 +37,7 @@ public class AdvertValidatorService(ICategoryRepository categoryRepository) : IA
     }
 
     /// <inheritdoc />
-    public async Task<bool> BeforExecuteRequestValidate_ExistCategoryIdAsync(Guid? id, CancellationToken cancellationToken)
+    public async Task<bool> BeforExecuteRequestValidate_ExistCategoryAsync(Guid? id, CancellationToken cancellationToken)
     {
         id = BeforeExecuteRequestValidate_Id(id);
         if (await _categoryRepository.GetByIdAsync(id.Value, cancellationToken) is not null)

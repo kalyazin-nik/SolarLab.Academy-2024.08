@@ -29,7 +29,7 @@ public class AdvertService(IAdvertRepository advertRepository,
     {
         using var _ = _structuralLoggingService.PushProperty("CreateAdvert", createAdvert, true);
         _logger.LogInformation("Создание объявления: {@createAdvert}", createAdvert);
-        await _validatorService.BeforExecuteRequestValidate_ExistCategoryIdAsync(createAdvert.CategoryId, cancellationToken);
+        await _validatorService.BeforExecuteRequestValidate_ExistCategoryAsync(createAdvert.CategoryId, cancellationToken);
 
         return await _advertRepository.CreateAsync(createAdvert, cancellationToken);
     }
