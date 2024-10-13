@@ -8,15 +8,20 @@ public class CategoryCreateDto
     /// <summary>
     /// Название категории.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Описание.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
+
+    /// <summary>
+    /// Идентификатор родительской категории.
+    /// </summary>
+    public Guid? ParentId { get; set; }
 
     /// <summary>
     /// Номер.
     /// </summary>
-    public string Number { get; set; }
+    public string? Number { get; set; }
 }
