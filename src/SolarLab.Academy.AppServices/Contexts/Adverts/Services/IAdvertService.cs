@@ -17,8 +17,8 @@ public interface IAdvertService
     /// <br/><br/>Будет выбрашено исключение <see cref="BadRequestException"/>, в случае, если, у передаваемой модели,
     /// идентификатор окажется со значением null или по умолчанию. Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, в случае, 
     /// если модель категории отстутствует в репозитории.</returns>
-    /// <exception cref="BadRequestException">В случае, если, у передаваемой модели, идентификатор категории будет со значением null или по умолчанию.</exception>
-    /// <exception cref="EntityNotFoundException">В случае, если модель категории будет отсутствовать в репозитории.</exception>
+    /// <exception cref="BadRequestException"></exception>
+    /// <exception cref="EntityNotFoundException"></exception>
     Task<Guid> CreateAsync(AdvertCreateDto dto, CancellationToken cancellationToken);
 
     /// <summary>

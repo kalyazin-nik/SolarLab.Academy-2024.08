@@ -19,7 +19,7 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
     private readonly IMapper _mapper = mapper;
 
     /// <inheritdoc />
-    public async Task<Guid> AddAsync(CategoryCreateDto dto, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAsync(CategoryCreateDto dto, CancellationToken cancellationToken)
     {
         var category = _mapper.Map<CategoryCreateDto, Category>(dto);
         await _repository.AddAsync(category, cancellationToken);
