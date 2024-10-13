@@ -1,9 +1,10 @@
 ﻿using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Advert;
+using SolarLab.Academy.Contracts.Categories;
 
-namespace SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Sevice;
+namespace SolarLab.Academy.AppServices.Validator;
 
-public interface IAdvertValidatorService
+public interface IValidationService
 {
     /// <summary>
     /// Проверка коллекции моделей объявлений <see cref="AdvertSmallDto"/>, допускающей значение null или пусто, после выполнения запроса к репозиторию.
@@ -15,7 +16,7 @@ public interface IAdvertValidatorService
     /// <param name="collection">Коллекция моделей объявлений.</param>
     /// <returns>Утвержденная коллекция моделей <see cref="AdvertSmallDto"/>.</returns>
     /// <exception cref="EntitiesNotFoundException" />
-    IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_Collection(IReadOnlyCollection<AdvertSmallDto>? collection);
+    IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_AdvertSmallCollection(IReadOnlyCollection<AdvertSmallDto>? collection);
 
     /// <summary>
     /// Проверка модели объявления <see cref="AdvertDto"/>, допускающая значение null, после выполнения запроса к репозиторию.
@@ -29,15 +30,15 @@ public interface IAdvertValidatorService
     AdvertDto AfterExecuteRequestValidate_Advert(AdvertDto? advert);
 
     /// <summary>
-    /// Проверка идентификатора, допускающего значение null, перед выполнением запроса к репозиторию. 
+    /// Проверка модели категории <see cref="CategoryDto"/>, допускающего значение null, после выполнения запроса к репозиторию.
     /// </summary>
     /// <remarks>
-    /// Будет выбрашено исключение <see cref="BadRequestException"/>, в случае, если идентификатор окажется со значением null или по умолчанию.
+    /// Будет выбрашено исключение <see cref="EntityNotFoundException"/>, в случае, если модель категории <see cref="CategoryDto"/> имеет значение null.
     /// </remarks>
-    /// <param name="id">Идентификатор.</param>
-    /// <returns>Утвержденный идентификатор, что не имеет значение null.</returns>
-    /// <exception cref="BadRequestException" />
-    Guid BeforeExecuteRequestValidate_Id(Guid? id);
+    /// <param name="category">Модель категории.</param>
+    /// <returns>Утвержденная модель категории <see cref="CategoryDto"/>.</returns>
+    /// <exception cref="EntityNotFoundException" />
+    CategoryDto AfterExecuteRequestValidate_Category(CategoryDto? category);
 
     /// <summary>
     /// Проверка, существует ли модель категории в репозитории по данному идентификатору.
@@ -51,4 +52,15 @@ public interface IAdvertValidatorService
     /// <exception cref="BadRequestException" />
     /// <exception cref="EntityNotFoundException" />
     Task<bool> BeforExecuteRequestValidate_ExistCategoryAsync(Guid? id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверка идентификатора, допускающего значение null, перед выполнением запроса к репозиторию. 
+    /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, в случае, если идентификатор окажется со значением null или по умолчанию.
+    /// </remarks>
+    /// <param name="id">Идентификатор.</param>
+    /// <returns>Утвержденный идентификатор.</returns>
+    /// <exception cref="BadRequestException" />
+    Guid BeforeExecuteRequestValidate_Id(Guid? id);
 }

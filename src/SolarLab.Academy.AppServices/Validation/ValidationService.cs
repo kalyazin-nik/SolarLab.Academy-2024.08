@@ -3,14 +3,14 @@ using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Categories;
 
-namespace SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Sevice;
+namespace SolarLab.Academy.AppServices.Validator;
 
-public class AdvertValidatorService(ICategoryRepository categoryRepository) : IAdvertValidatorService
+public class ValidationService(ICategoryRepository categoryRepository) : IValidationService
 {
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
     /// <inheritdoc />
-    public IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_Collection(IReadOnlyCollection<AdvertSmallDto>? collection)
+    public IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_AdvertSmallCollection(IReadOnlyCollection<AdvertSmallDto>? collection)
     {
         return collection is not null && collection.Count > 0 ? collection : throw new EntitiesNotFoundException("Response", "Объявления не найдены.");
     }
@@ -19,6 +19,24 @@ public class AdvertValidatorService(ICategoryRepository categoryRepository) : IA
     public AdvertDto AfterExecuteRequestValidate_Advert(AdvertDto? advert)
     {
         return advert is not null ? advert : throw new EntityNotFoundException("Response", "Объявление на найдено.");
+    }
+
+    /// <inheritdoc />
+    public CategoryDto AfterExecuteRequestValidate_Category(CategoryDto? category)
+    {
+        return category is not null ? category : throw new EntityNotFoundException("Response", "Категория не найдена.");
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> BeforExecuteRequestValidate_ExistCategoryAsync(Guid? id, CancellationToken cancellationToken)
+    {
+        id = BeforeExecuteRequestValidate_Id(id);
+        if (await _categoryRepository.GetByIdAsync(id.Value, cancellationToken) is not null)
+        {
+            return true;
+        }
+
+        throw new EntityNotFoundException("CategoryId", "Категория не существует.");
     }
 
     /// <inheritdoc />
@@ -34,17 +52,5 @@ public class AdvertValidatorService(ICategoryRepository categoryRepository) : IA
         {
             throw new BadRequestException(propertyName, $"Поле '{propertyName}' не может быть пустым.");
         }
-    }
-
-    /// <inheritdoc />
-    public async Task<bool> BeforExecuteRequestValidate_ExistCategoryAsync(Guid? id, CancellationToken cancellationToken)
-    {
-        id = BeforeExecuteRequestValidate_Id(id);
-        if (await _categoryRepository.GetByIdAsync(id.Value, cancellationToken) is not null)
-        {
-            return true;
-        }
-
-        throw new EntityNotFoundException("CategoryId", "Категория не существует.");
     }
 }

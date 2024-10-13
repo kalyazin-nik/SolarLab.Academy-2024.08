@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Models;
-using SolarLab.Academy.AppServices.Contexts.Categories.Validator.Models;
+using SolarLab.Academy.AppServices.Contexts.Adverts.Validator;
+using SolarLab.Academy.AppServices.Contexts.Categories.Validator;
 
 namespace SolarLab.Academy.ComponentRegistrar;
 

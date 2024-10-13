@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SolarLab.Academy.Contracts.Advert;
 
-namespace SolarLab.Academy.AppServices.Contexts.Adverts.Validator.Models;
+namespace SolarLab.Academy.AppServices.Contexts.Adverts.Validator;
 
 public class AdvertCreateValidator : AbstractValidator<AdvertCreateDto>
 {

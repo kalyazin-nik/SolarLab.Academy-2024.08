@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SolarLab.Academy.Contracts.Categories;
 
-namespace SolarLab.Academy.AppServices.Contexts.Categories.Validator.Models;
+namespace SolarLab.Academy.AppServices.Contexts.Categories.Validator;
 
 public class CategoryCreateValidator : AbstractValidator<CategoryCreateDto>
 {
