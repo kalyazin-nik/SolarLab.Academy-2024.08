@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolarLab.Academy.AppServices.Contexts.Categories.Services;
 using SolarLab.Academy.Contracts.Categories;
+using SolarLab.Academy.Contracts.Error;
 
 namespace SolarLab.Academy.Api.Controllers;
 
@@ -14,7 +14,7 @@ namespace SolarLab.Academy.Api.Controllers;
 // [Authorize]
 [ApiController]
 [Route("category")]
-[ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+[ProducesResponseType(typeof(InternalServerError), (int)HttpStatusCode.InternalServerError)]
 public class CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger) : ControllerBase
 {
     private readonly ICategoryService _categoryService = categoryService;
@@ -27,12 +27,12 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Идентификатор созданной категории.</returns>
     [HttpPost("create")]
+    [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Guid), (int)HttpStatusCode.Created)]
     public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryCreateDto dto, CancellationToken cancellationToken)
     {
-        var categoryId = await _categoryService.AddAsync(dto, cancellationToken);
-
-        return StatusCode((int)HttpStatusCode.Created, categoryId);
+        return StatusCode((int)HttpStatusCode.Created, await _categoryService.AddAsync(dto, cancellationToken));
     }
 
     /// <summary>
@@ -42,12 +42,11 @@ public class CategoryController(ICategoryService categoryService, ILogger<Catego
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных категории, если категория будет найдена, иначе null.</returns>
     [HttpGet("get")]
+    [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var categoryDto = await _categoryService.GetByIdAsync(id, cancellationToken);
-
-        return categoryDto is not null ? Ok(categoryDto) : NoContent();
+        return Ok(await _categoryService.GetByIdAsync(id, cancellationToken));
     }
 }
