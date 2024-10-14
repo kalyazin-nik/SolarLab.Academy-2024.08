@@ -25,16 +25,28 @@ public interface IFileContentService
     /// <summary>
     /// Получение файла по идентификатору.
     /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор будет иметь значение null или по умолчанию.<br />
+    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется файл по данному идентификатору.
+    /// </remarks>
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Объект передачи данных файла для скачивания.</returns>
-    Task<FileContentDto?> GetFileAsync(Guid? id, CancellationToken cancellationToken);
+    /// <returns>Модель файла для скачивания.</returns>
+    /// <exception cref="BadRequestException" />
+    /// <exception cref="EntityNotFoundException" />
+    Task<FileContentDto> GetFileAsync(Guid? id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение информации о файле по идентификатору.
     /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор будет иметь значение null или по умолчанию.<br />
+    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется файл по данному идентификатору.
+    /// </remarks>
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Объект передачи данных информации о файле.</returns>
+    /// <returns>Модель информации о файле.</returns>
+    /// <exception cref="BadRequestException" />
+    /// <exception cref="EntityNotFoundException" />
     Task<FileContentInfoDto> GetFileInfoByIdAsync(Guid? id, CancellationToken cancellationToken);
 }

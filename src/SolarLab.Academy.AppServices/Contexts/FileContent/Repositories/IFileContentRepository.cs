@@ -21,15 +21,15 @@ public interface IFileContentRepository
     /// </summary>
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Объект передачи данных файла для скачивания.</returns>
-    Task<FileContentDto?> GetFileAsync(Guid id, CancellationToken cancellationToken);
+    /// <returns>Модель файла для скачивания.</returns>
+    Task<FileContentDto> GetFileAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение информации о файле по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Объект передачи данных информации о файле.</returns>
+    /// <returns>Модель информации о файле.</returns>
     Task<FileContentInfoDto> GetFileInfoByIdAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>

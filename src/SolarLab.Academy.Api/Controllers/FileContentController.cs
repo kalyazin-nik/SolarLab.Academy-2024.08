@@ -36,16 +36,17 @@ namespace SolarLab.Academy.Api.Controllers
         /// </summary>
         /// <param name="id">Идентификатор.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
-        /// <returns>Файл для скачивания.</returns>
+        /// <returns>Модель файла для скачивания.</returns>
         [HttpGet("download")]
+        [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(FileContentResult), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
-        public async Task<IActionResult> DownloadAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DownloadAsync(Guid? id, CancellationToken cancellationToken)
         {
             var file = await _fileContentService.GetFileAsync(id, cancellationToken);
-            Response.ContentLength = file?.Content.Length;
+            Response.ContentLength = file.Content.Length;
 
-            return file is not null ? File(file.Content, file.ContentType, file.Name) : NoContent();
+            return File(file.Content, file.ContentType, file.Name);
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace SolarLab.Academy.Api.Controllers
         /// </summary>
         /// <param name="id">Идентификатор.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
-        /// <returns>Объект передачи данных информации о файле.</returns>
+        /// <returns>Модель информации о файле.</returns>
         [HttpGet("get")]
         [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]

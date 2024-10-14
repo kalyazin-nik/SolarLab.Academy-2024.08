@@ -29,12 +29,12 @@ public class FileContentRepository(IRepository<FileContent, AcademyDbContext> re
     }
 
     /// <inheritdoc />
-    public async Task<FileContentDto?> GetFileAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<FileContentDto> GetFileAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _repository.GetAll()
             .Where(x => x.Id == id)
             .ProjectTo<FileContentDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(cancellationToken);    
+            .FirstAsync(cancellationToken);    
     }
 
     /// <inheritdoc />
@@ -49,6 +49,6 @@ public class FileContentRepository(IRepository<FileContent, AcademyDbContext> re
     /// <inheritdoc />
     public async Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _repository.IsExist(id, cancellationToken);
+        return await _repository.IsExistAsync(id, cancellationToken);
     }
 }

@@ -32,18 +32,14 @@ public class FileContentService(
         return await _repository.UploadAsync(file, cancellationToken);
     }
 
-    private static async Task<byte[]> GetBytesAsync(IFormFile file, CancellationToken cancellationToken)
-    {
-        using var memoryStream = new MemoryStream();
-        await file.CopyToAsync(memoryStream, cancellationToken);
-
-        return memoryStream.ToArray();
-    }
-
     /// <inheritdoc />
-    public async Task<FileContentDto?> GetFileAsync(Guid? id, CancellationToken cancellationToken)
+    public async Task<FileContentDto> GetFileAsync(Guid? id, CancellationToken cancellationToken)
     {
-        return await _repository.GetFileAsync(id!.Value, cancellationToken);
+        using var _ = _structuralLoggingService.PushProperty("Id", id!);
+        _logger.LogInformation("Скачивание файла: {@id}", id);
+        id = await _validationService.BeforExecuteRequestValidate_ExistFileAsync(id, cancellationToken);
+
+        return await _repository.GetFileAsync(id.Value, cancellationToken);
     }
 
     /// <inheritdoc />
