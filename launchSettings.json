@@ -3,8 +3,14 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "None",
+      "composeLaunchServiceName": "solarlab.academy.api",
       "serviceActions": {
-        "solarlab.academy.api": "StartDebugging"
+        "solarlab.academy.api": "StartDebugging",
+        "adminer": "StartWithoutDebugging",
+        "pgadmin": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging",
+        "solarlab.academy.dbmigrator": "StartDebugging"
       }
     }
   }

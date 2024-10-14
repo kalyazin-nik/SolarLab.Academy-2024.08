@@ -65,4 +65,12 @@ public interface IRepository<TEntity, TContext>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns></returns>
     Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверка на существование сущности в репозитории по идентификатору.
+    /// </summary>
+    /// <param name="id">Идентификатор.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Вернет true, в случае если сущность будет найдена, иначе false.</returns>
+    Task<bool> IsExist(Guid id, CancellationToken cancellationToken);
 }

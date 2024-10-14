@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using SolarLab.Academy.Contracts.FileContents;
 using SolarLab.Academy.Domain;
 
@@ -12,8 +13,17 @@ public class FileContentProfile : Profile
 
         CreateMap<FileContent, FileContentDto>(MemberList.None);
 
-        CreateMap<FileContentDto, FileContent>(MemberList.None)
+        CreateMap<IFormFile, FileContent>(MemberList.None)
             .ForMember(x => x.CreatedAt, map => map.MapFrom(x => DateTime.UtcNow))
-            .ForMember(x => x.Length, map => map.MapFrom(x => x.Content.Length));
+            .ForMember(x => x.Name, map => map.MapFrom(x => x.FileName))
+            .ForMember(x => x.Content, map => map.MapFrom(x => GetBytes(x)));
+    }
+
+    private static byte[] GetBytes(IFormFile file)
+    {
+        using var memoryStream = new MemoryStream();
+        file.CopyTo(memoryStream);
+
+        return memoryStream.ToArray();
     }
 }

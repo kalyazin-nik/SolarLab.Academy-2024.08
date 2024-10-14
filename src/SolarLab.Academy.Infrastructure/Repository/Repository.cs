@@ -64,4 +64,10 @@ public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
         DbSet.Update(entity);
         await DbContext.SaveChangesAsync(cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task<bool> IsExist(Guid id, CancellationToken cancellationToken)
+    {
+        return await DbSet.Where(x => x.Id == id).AnyAsync(cancellationToken);
+    }
 }

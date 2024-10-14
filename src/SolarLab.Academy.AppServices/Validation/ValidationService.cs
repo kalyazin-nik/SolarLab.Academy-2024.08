@@ -1,13 +1,20 @@
-﻿using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
+using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
+using SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
+using SolarLab.Academy.AppServices.Contexts.FileContent.Validator;
 using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Categories;
 
 namespace SolarLab.Academy.AppServices.Validator;
 
-public class ValidationService(ICategoryRepository categoryRepository) : IValidationService
+public class ValidationService(
+    ICategoryRepository categoryRepository,
+    IFileContentRepository fileContentRepository) : IValidationService
 {
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
+    private readonly IFileContentRepository _fileContentRepository = fileContentRepository;
 
     /// <inheritdoc />
     public IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_AdvertSmallCollection(IReadOnlyCollection<AdvertSmallDto>? collection)
@@ -28,6 +35,17 @@ public class ValidationService(ICategoryRepository categoryRepository) : IValida
     }
 
     /// <inheritdoc />
+    public async Task<IFormFile> BeforeExecuteRequestValidate_IFormFileAsync(IFormFile? file, CancellationToken cancellationToken)
+    {
+        if (await new FormFileValidator().ValidateAsync(file!, cancellationToken) is ValidationResult result && !result.IsValid)
+        {
+            throw new BadRequestException(result);
+        }
+
+        return file!;
+    }
+
+    /// <inheritdoc />
     public async Task<bool> BeforExecuteRequestValidate_ExistCategoryAsync(Guid? id, CancellationToken cancellationToken)
     {
         id = BeforeExecuteRequestValidate_Id(id);
@@ -38,6 +56,19 @@ public class ValidationService(ICategoryRepository categoryRepository) : IValida
 
         throw new EntityNotFoundException("CategoryId", "Категория не существует.");
     }
+
+    /// <inheritdoc />
+    public async Task<Guid> BeforExecuteRequestValidate_ExistFileAsync(Guid? id, CancellationToken cancellationToken)
+    {
+        id = BeforeExecuteRequestValidate_Id(id);
+        if (await _fileContentRepository.IsExistAsync(id.Value, cancellationToken))
+        {
+            return id.Value;
+        }
+
+        throw new EntityNotFoundException("Id", "Файл с таким идентификатором не существует.");
+    }
+
 
     /// <inheritdoc />
     public Guid BeforeExecuteRequestValidate_Id(Guid? id)

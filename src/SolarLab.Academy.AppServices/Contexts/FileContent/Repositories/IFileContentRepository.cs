@@ -1,4 +1,5 @@
-﻿using SolarLab.Academy.Contracts.FileContents;
+﻿using Microsoft.AspNetCore.Http;
+using SolarLab.Academy.Contracts.FileContents;
 
 namespace SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
 
@@ -10,10 +11,10 @@ public interface IFileContentRepository
     /// <summary>
     /// Загрузка файла в репозиторий.
     /// </summary>
-    /// <param name="fileContentDto">Объект передачи данных файла.</param>
+    /// <param name="file">Файл, отправленный с HTTP запросом.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Идентификатор файла.</returns>
-    Task<Guid> UploadAsync(FileContentDto fileContentDto, CancellationToken cancellationToken);
+    Task<Guid> UploadAsync(IFormFile file, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение файла по идентификатору.
@@ -29,5 +30,13 @@ public interface IFileContentRepository
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных информации о файле.</returns>
-    Task<FileContentInfoDto?> GetFileInfoByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<FileContentInfoDto> GetFileInfoByIdAsync(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверка, существует ли файл в репозитории.
+    /// </summary>
+    /// <param name="id">Идентификатор файла.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Вернет true, в случае если файл будет найден, иначе false.</returns>
+    Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken);
 }

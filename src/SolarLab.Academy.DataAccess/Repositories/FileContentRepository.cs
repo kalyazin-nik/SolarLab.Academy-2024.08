@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
 using SolarLab.Academy.Contracts.FileContents;
@@ -19,9 +20,9 @@ public class FileContentRepository(IRepository<FileContent, AcademyDbContext> re
     private readonly IMapper _mapper = mapper;
 
     /// <inheritdoc />
-    public async Task<Guid> UploadAsync(FileContentDto fileContentDto, CancellationToken cancellationToken)
+    public async Task<Guid> UploadAsync(IFormFile file, CancellationToken cancellationToken)
     {
-        var fileContent = _mapper.Map<FileContentDto, FileContent>(fileContentDto);
+        var fileContent = _mapper.Map<IFormFile, FileContent>(file);
         await _repository.AddAsync(fileContent, cancellationToken);
 
         return fileContent.Id;
@@ -37,11 +38,17 @@ public class FileContentRepository(IRepository<FileContent, AcademyDbContext> re
     }
 
     /// <inheritdoc />
-    public async Task<FileContentInfoDto?> GetFileInfoByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<FileContentInfoDto> GetFileInfoByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _repository.GetAll()
             .Where(x => x.Id == id)
             .ProjectTo<FileContentInfoDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _repository.IsExist(id, cancellationToken);
     }
 }

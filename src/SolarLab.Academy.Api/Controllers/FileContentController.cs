@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Services;
+using SolarLab.Academy.Contracts.Error;
 using SolarLab.Academy.Contracts.FileContents;
 using System.Net;
 
@@ -9,14 +10,12 @@ namespace SolarLab.Academy.Api.Controllers
     /// Контроллер по работе с файлами.
     /// </summary>
     /// <param name="fileContentService">Сервис по работе с файлами.</param>
-    /// <param name="logger">Логгер <see cref="FileContentController"/></param>
     [ApiController]
     [Route("file")]
-    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public class FileContentController(IFileContentService fileContentService, ILogger<FileContentController> logger) : ControllerBase
+    [ProducesResponseType(typeof(InternalServerError), (int)HttpStatusCode.InternalServerError)]
+    public class FileContentController(IFileContentService fileContentService) : ControllerBase
     {
         private readonly IFileContentService _fileContentService = fileContentService;
-        private readonly ILogger<FileContentController> _logger = logger;
 
         /// <summary>
         /// Загрузка файла в систему.
@@ -25,12 +24,11 @@ namespace SolarLab.Academy.Api.Controllers
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Идентификатор файла.</returns>
         [HttpPost("upload")]
+        [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Guid), (int)HttpStatusCode.Accepted)]
-        public async Task<IActionResult> UploadAsync(IFormFile file, CancellationToken cancellationToken)
+        public async Task<IActionResult> UploadAsync(IFormFile? file, CancellationToken cancellationToken)
         {
-            var fileId = await _fileContentService.UploadAsync(file, cancellationToken);
-
-            return StatusCode((int)HttpStatusCode.Accepted, fileId);
+            return StatusCode((int)HttpStatusCode.Accepted, await _fileContentService.UploadAsync(file, cancellationToken));
         }
 
         /// <summary>
@@ -39,7 +37,7 @@ namespace SolarLab.Academy.Api.Controllers
         /// <param name="id">Идентификатор.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Файл для скачивания.</returns>
-        [HttpGet("download/{id}")]
+        [HttpGet("download")]
         [ProducesResponseType(typeof(FileContentResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> DownloadAsync(Guid id, CancellationToken cancellationToken)
@@ -56,14 +54,13 @@ namespace SolarLab.Academy.Api.Controllers
         /// <param name="id">Идентификатор.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Объект передачи данных информации о файле.</returns>
-        [HttpGet("get/{id}")]
+        [HttpGet("get")]
+        [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(NotFoundError), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(FileContentInfoDto), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NoContent)]
-        public async Task<IActionResult> GetFileInfoByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetFileInfoByIdAsync(Guid? id, CancellationToken cancellationToken)
         {
-            var fileInfo = await _fileContentService.GetFileInfoByIdAsync(id, cancellationToken);
-
-            return fileInfo is not null ? Ok(fileInfo) : NoContent();
+            return Ok(await _fileContentService.GetFileInfoByIdAsync(id, cancellationToken));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SolarLab.Academy.AppServices.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
+using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Categories;
 
@@ -41,6 +42,19 @@ public interface IValidationService
     CategoryDto AfterExecuteRequestValidate_Category(CategoryDto? category);
 
     /// <summary>
+    /// Проверка файла отправленного с HttpRequest.
+    /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, в случае, если: файл со значением null или пуст,<br />
+    /// тип контента не будет соответсвовать типу фотографи, размер файла будет больше 2 мегабайт или равен нулю.
+    /// </remarks>
+    /// <param name="file">Файл отправленный с HttpRequest.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Утвержденный файл.</returns>
+    /// <exception cref="BadRequestException" />
+    Task<IFormFile> BeforeExecuteRequestValidate_IFormFileAsync(IFormFile? file, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Проверка, существует ли модель категории в репозитории по данному идентификатору.
     /// </summary>
     /// <remarks>
@@ -52,6 +66,19 @@ public interface IValidationService
     /// <exception cref="BadRequestException" />
     /// <exception cref="EntityNotFoundException" />
     Task<bool> BeforExecuteRequestValidate_ExistCategoryAsync(Guid? id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверка, существует ли модель файла в репозитории по данному идентификатору.
+    /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор будет иметь значение null или по умолчанию.<br />
+    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется файл по данному идентификатору.
+    /// </remarks>
+    /// <param name="id">Идентификатор файла.</param>
+    /// <returns>Утвержденный идентификатор.</returns>
+    /// <exception cref="BadRequestException" />
+    /// <exception cref="EntityNotFoundException" />
+    Task<Guid> BeforExecuteRequestValidate_ExistFileAsync(Guid? id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Проверка идентификатора, допускающего значение null, перед выполнением запроса к репозиторию. 
