@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolarLab.Academy.AppServices.Contexts.Account.Services;
+using SolarLab.Academy.Contracts.Error;
 using SolarLab.Academy.Contracts.User;
 
 namespace SolarLab.Academy.Api.Controllers;
@@ -28,12 +29,11 @@ public class AccountController(IAccountService accountService, ILogger<AccountCo
     /// <returns>Модель передачи данных зарегистрированного пользователя.</returns>
     [HttpPost]
     [Route("register")]
+    [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterRequestDto model, CancellationToken cancellationToken)
     {
-        var user = await _accountService.RegisterAsync(model, cancellationToken);
-
-        return Ok(user);
+        return Ok(await _accountService.RegisterAsync(model, cancellationToken));
     }
 
     /// <summary>

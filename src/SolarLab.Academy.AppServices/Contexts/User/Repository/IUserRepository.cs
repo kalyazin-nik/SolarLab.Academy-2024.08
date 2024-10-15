@@ -10,10 +10,10 @@ public interface IUserRepository
     /// <summary>
     /// Регистрация пользователя.
     /// </summary>
-    /// <param name="dto">Объект передачи данных регистрации пользователя.</param>
+    /// <param name="userRegister">Модель регистрации пользователя.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Объект передачи данных пользователя.</returns>
-    Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken);
+    /// <returns>Модель пользователя.</returns>
+    Task<UserDto> RegisterAsync(UserRegisterRequestDto userRegister, CancellationToken cancellationToken);
 
     /// <summary>
     /// Плучение всех пользователей.

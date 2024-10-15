@@ -11,5 +11,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(x => x.Id);
         builder.HasIndex(x => x.Id);
         builder.HasIndex(x => x.Login);
+        builder.Property(x => x.BirthDate).HasColumnType("timestamp");
     }
 }

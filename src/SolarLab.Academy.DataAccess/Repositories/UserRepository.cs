@@ -44,9 +44,9 @@ public class UserRepository(IRepository<User, AcademyDbContext> repository, IMap
     }
 
     /// <inheritdoc />
-    public async Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken)
+    public async Task<UserDto> RegisterAsync(UserRegisterRequestDto userRegister, CancellationToken cancellationToken)
     {
-        var user = _mapper.Map<UserRegisterRequestDto, User>(dto);
+        var user = _mapper.Map<UserRegisterRequestDto, User>(userRegister);
         await _repository.AddAsync(user, cancellationToken);
 
         return _mapper.Map<User,  UserDto>(user);

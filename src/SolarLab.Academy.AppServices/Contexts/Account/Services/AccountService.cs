@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using SolarLab.Academy.AppServices.Contexts.Adverts.Services;
 using SolarLab.Academy.AppServices.Contexts.User.Repository;
 using SolarLab.Academy.AppServices.Helpers;
+using SolarLab.Academy.AppServices.Services;
+using SolarLab.Academy.AppServices.Validator;
 using SolarLab.Academy.Contracts.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,17 +19,32 @@ namespace SolarLab.Academy.AppServices.Contexts.Account.Services;
 /// </summary>
 /// <param name="userRepository">Репозиторий по работе с пользователями.</param>
 /// <param name="configuration">Конфигурация приложения.</param>
+/// <param name="validationService">Сервис валидации объектов.</param>
 /// <param name="httpContextAccessor">Доступ к контексту Http.</param>
-public class AccountService(IUserRepository userRepository, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : IAccountService
+/// <param name="logger">Логгер <see cref="AccountService"/></param>
+/// <param name="structuralLoggingService">Служба структурного логгирования.</param>
+public class AccountService(
+    IUserRepository userRepository, 
+    IConfiguration configuration,
+    IValidationService validationService,
+    IHttpContextAccessor httpContextAccessor,
+    ILogger<AdvertService> logger,
+    IStructuralLoggingService structuralLoggingService) : IAccountService
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IConfiguration _configuration = configuration;
+    private readonly IValidationService _validationService = validationService;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly ILogger<AdvertService> _logger = logger;
+    private readonly IStructuralLoggingService _structuralLoggingService = structuralLoggingService;
 
     /// <inheritdoc />
-    public async Task<UserDto> RegisterAsync(UserRegisterRequestDto dto, CancellationToken cancellationToken)
+    public async Task<UserDto> RegisterAsync(UserRegisterRequestDto userRegister, CancellationToken cancellationToken)
     {
-        return await _userRepository.RegisterAsync(dto, cancellationToken);
+        using var _ = _structuralLoggingService.PushProperty("UserRegister", userRegister!, true);
+        _logger.LogInformation("Создание объявления: {@userRegister}", userRegister);
+
+        return await _userRepository.RegisterAsync(userRegister, cancellationToken);
     }
 
     /// <inheritdoc />
