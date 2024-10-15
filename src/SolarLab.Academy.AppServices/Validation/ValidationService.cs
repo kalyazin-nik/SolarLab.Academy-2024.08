@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Validator;
+using SolarLab.Academy.AppServices.Contexts.User.Repository;
 using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Categories;
@@ -11,10 +12,12 @@ namespace SolarLab.Academy.AppServices.Validator;
 
 public class ValidationService(
     ICategoryRepository categoryRepository,
-    IFileContentRepository fileContentRepository) : IValidationService
+    IFileContentRepository fileContentRepository,
+    IUserRepository userRepository) : IValidationService
 {
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
     private readonly IFileContentRepository _fileContentRepository = fileContentRepository;
+    private readonly IUserRepository _userRepository = userRepository;
 
     /// <inheritdoc />
     public IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_AdvertSmallCollection(IReadOnlyCollection<AdvertSmallDto>? collection)
@@ -69,6 +72,17 @@ public class ValidationService(
         throw new EntityNotFoundException("Id", "Файл с таким идентификатором не существует.");
     }
 
+    /// <inheritdoc />
+    public async Task<Guid> BeforExecuteRequestValidate_ExistUserAsync(Guid? id, CancellationToken cancellationToken)
+    {
+        id = BeforeExecuteRequestValidate_Id(id);
+        if (await _userRepository.IsExistAsync(id.Value, cancellationToken))
+        {
+            return id.Value;
+        }
+
+        throw new EntityNotFoundException("Id", "Пользователь с таким идентификатором не найден.");
+    }
 
     /// <inheritdoc />
     public Guid BeforeExecuteRequestValidate_Id(Guid? id)

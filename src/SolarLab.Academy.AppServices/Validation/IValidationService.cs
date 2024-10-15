@@ -81,6 +81,19 @@ public interface IValidationService
     Task<Guid> BeforExecuteRequestValidate_ExistFileAsync(Guid? id, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Проверка, существует ли модель пользователя в репозитории по данному идентификатору.
+    /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор пользователя будет иметь значение null или по умолчанию.<br />
+    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется пользователь по данному идентификатору.
+    /// </remarks>
+    /// <param name="id">Идентификатор файла.</param>
+    /// <returns>Утвержденный идентификатор.</returns>
+    /// <exception cref="BadRequestException" />
+    /// <exception cref="EntityNotFoundException" />
+    Task<Guid> BeforExecuteRequestValidate_ExistUserAsync(Guid? id, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Проверка идентификатора, допускающего значение null, перед выполнением запроса к репозиторию. 
     /// </summary>
     /// <remarks>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolarLab.Academy.AppServices.Contexts.Account.Services;
+using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Error;
 using SolarLab.Academy.Contracts.User;
 
@@ -56,15 +57,14 @@ public class AccountController(IAccountService accountService, ILogger<AccountCo
     /// Получение информации о текущем пользователе.
     /// </summary>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Объект передачи данных пользователя.</returns>
+    /// <returns>Модель пользователя.</returns>
     [HttpGet]
     [Route("get/current-user")]
+    [ProducesResponseType(typeof(BadRequestError), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(EntityNotFoundException), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Nullable), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetCurrentUserInfoAsync(CancellationToken cancellationToken)
     {
-        var user = await _accountService.GetCurrentUserAsync(cancellationToken);
-
-        return user is not null ? Ok(user) : NotFound();
+        return Ok(await _accountService.GetCurrentUserAsync(cancellationToken));
     }
 }

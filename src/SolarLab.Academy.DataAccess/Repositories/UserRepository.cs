@@ -28,7 +28,7 @@ public class UserRepository(IRepository<User, AcademyDbContext> repository, IMap
     }
 
     /// <inheritdoc />
-    public async Task<UserDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<UserDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var userDto = await _repository.GetByIdAsync(id, cancellationToken);
         return _mapper.Map<UserDto>(userDto);
@@ -41,6 +41,12 @@ public class UserRepository(IRepository<User, AcademyDbContext> repository, IMap
             .Where(x => x.Login == dto.Login)
             .ProjectTo<UserLoginResponseDto>(_mapper.ConfigurationProvider)
             .FirstAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _repository.IsExistAsync(id, cancellationToken);
     }
 
     /// <inheritdoc />

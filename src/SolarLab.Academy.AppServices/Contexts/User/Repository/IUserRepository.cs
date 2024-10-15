@@ -28,7 +28,7 @@ public interface IUserRepository
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных пользователя.</returns>
-    Task<UserDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<UserDto> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получение пользователя по логину.
@@ -37,4 +37,12 @@ public interface IUserRepository
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных ответа запроса логина пользователя.</returns>
     Task<UserLoginResponseDto?> GetByLoginAsync(UserLoginRequestDto dto, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверка, существует ли пользователь в репозитории.
+    /// </summary>
+    /// <param name="id">Идентификатор пользователя.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Вернет true, в случае если пользователь будет найден, иначе false.</returns>
+    Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken);
 }

@@ -1,4 +1,6 @@
-﻿using SolarLab.Academy.Contracts.User;
+﻿using Microsoft.AspNetCore.Http;
+using SolarLab.Academy.AppServices.Exceptions;
+using SolarLab.Academy.Contracts.User;
 
 namespace SolarLab.Academy.AppServices.Contexts.Account.Services;
 
@@ -26,7 +28,14 @@ public interface IAccountService
     /// <summary>
     /// Получить текущего пользователя.
     /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор пользователя будет иметь значение null или по умолчанию, 
+    /// который будет получен из <see cref="IHttpContextAccessor"/>.<br />
+    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется пользователь по данному идентификатору.
+    /// </remarks>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Объект передачи данных пользователя.</returns>
-    Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken);
+    /// <returns>Модель пользователя.</returns>
+    /// <exception cref="BadRequestException" />
+    /// <exception cref="EntityNotFoundException" />
+    Task<UserDto> GetCurrentUserAsync(CancellationToken cancellationToken);
 }

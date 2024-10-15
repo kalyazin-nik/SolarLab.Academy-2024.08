@@ -78,15 +78,15 @@ public class AccountService(
     }
 
     /// <inheritdoc />
-    public async Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken)
+    public async Task<UserDto> GetCurrentUserAsync(CancellationToken cancellationToken)
     {
         var claims = _httpContextAccessor.HttpContext.User.Claims;
-        var claimId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrWhiteSpace(claimId))
-        {
-            return null;
-        }
+        using var _ = _structuralLoggingService.PushProperty("Claims", claims, true);
+        _logger.LogInformation("Получение текущего пользователя: {@claims}", claims);
 
-        return await _userRepository.GetByIdAsync(Guid.Parse(claimId), cancellationToken);
+        var claimId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var id = await _validationService.BeforExecuteRequestValidate_ExistUserAsync(claimId is not null ? Guid.Parse(claimId) : null, cancellationToken);
+
+        return await _userRepository.GetByIdAsync(id, cancellationToken);
     }
 }
