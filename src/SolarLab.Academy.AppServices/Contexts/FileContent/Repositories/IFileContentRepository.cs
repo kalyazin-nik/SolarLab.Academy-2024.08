@@ -32,12 +32,4 @@ public interface IFileContentRepository : IBaseRepository
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Модель информации о файле.</returns>
     Task<FileContentInfoDto> GetFileInfoByIdAsync(Guid id, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Проверка, существует ли файл в репозитории.
-    /// </summary>
-    /// <param name="id">Идентификатор файла.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Вернет true, в случае если файл будет найден, иначе false.</returns>
-    Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken);
 }

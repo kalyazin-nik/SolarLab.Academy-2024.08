@@ -40,10 +40,8 @@ public class CategoryService(
     {
         using var _ = _structuralLoggingService.PushProperty("GetCategoryById", id!);
         _logger.LogInformation("Получение категории по идентификатору: {@Id}", id);
-        id = _validationService.BeforeExecuteRequestValidate_Id(id);
-        var category = await _categoryRepository.GetByIdAsync(id.Value, cancellationToken);
-        category = _validationService.AfterExecuteRequestValidate_Category(category);
+        id = await _validationService.BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes.CategoryRpository, id, cancellationToken);
 
-        return category;
+        return await _categoryRepository.GetByIdAsync(id.Value, cancellationToken);
     }
 }

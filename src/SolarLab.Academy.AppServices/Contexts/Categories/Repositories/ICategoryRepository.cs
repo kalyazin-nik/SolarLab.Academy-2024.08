@@ -22,5 +22,5 @@ public interface ICategoryRepository : IBaseRepository
     /// <param name="id">Идентификатор категории.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Категория. Вернётся null, если категория не будет найдена.</returns>
-    Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<CategoryDto> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 }

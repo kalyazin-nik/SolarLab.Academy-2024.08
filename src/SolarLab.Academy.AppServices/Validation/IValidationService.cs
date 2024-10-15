@@ -21,28 +21,6 @@ public interface IValidationService
     IReadOnlyCollection<AdvertSmallDto> AfterExecuteRequestValidate_AdvertSmallCollection(IReadOnlyCollection<AdvertSmallDto>? collection);
 
     /// <summary>
-    /// Проверка модели объявления <see cref="AdvertDto"/>, допускающая значение null, после выполнения запроса к репозиторию.
-    /// </summary>
-    /// <remarks>
-    /// Будет выбрашено исключение <see cref="EntityNotFoundException"/>, в случае, если модель объявления <see cref="AdvertDto"/> будет со значением null.
-    /// </remarks>
-    /// <param name="advert">Модель объявления.</param>
-    /// <returns>Утвержденная модель объявления <see cref="AdvertDto"/>, что не имеет значение null.</returns>
-    /// <exception cref="EntityNotFoundException" />
-    AdvertDto AfterExecuteRequestValidate_Advert(AdvertDto? advert);
-
-    /// <summary>
-    /// Проверка модели категории <see cref="CategoryDto"/>, допускающего значение null, после выполнения запроса к репозиторию.
-    /// </summary>
-    /// <remarks>
-    /// Будет выбрашено исключение <see cref="EntityNotFoundException"/>, в случае, если модель категории <see cref="CategoryDto"/> имеет значение null.
-    /// </remarks>
-    /// <param name="category">Модель категории.</param>
-    /// <returns>Утвержденная модель категории <see cref="CategoryDto"/>.</returns>
-    /// <exception cref="EntityNotFoundException" />
-    CategoryDto AfterExecuteRequestValidate_Category(CategoryDto? category);
-
-    /// <summary>
     /// Проверка файла отправленного с HttpRequest.
     /// </summary>
     /// <remarks>

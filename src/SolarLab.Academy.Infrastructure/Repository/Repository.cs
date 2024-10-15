@@ -32,9 +32,9 @@ public class Repository<TEntity, TContext> : IRepository<TEntity, TContext>
     }
 
     // <inheridoc />
-    public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await DbSet.Where(x => x.Id == id).FirstOrDefaultAsync();
+        return await DbSet.Where(x => x.Id == id).FirstAsync();
     }
 
     // <inheridoc />

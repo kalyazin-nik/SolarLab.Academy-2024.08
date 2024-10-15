@@ -30,7 +30,7 @@ public interface IAdvertRepository : IBaseRepository
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Модель объявления.</returns>
-    Task<AdvertDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<AdvertDto> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Выполняет получение объявлений по поисковому запросу.

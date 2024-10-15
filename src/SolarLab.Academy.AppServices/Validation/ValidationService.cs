@@ -8,7 +8,6 @@ using SolarLab.Academy.AppServices.Contexts.User.Repository;
 using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.Contracts.Advert;
-using SolarLab.Academy.Contracts.Categories;
 using SolarLab.Academy.Contracts.Enums;
 
 namespace SolarLab.Academy.AppServices.Validator;
@@ -31,18 +30,6 @@ public class ValidationService(
     }
 
     /// <inheritdoc />
-    public AdvertDto AfterExecuteRequestValidate_Advert(AdvertDto? advert)
-    {
-        return advert is not null ? advert : throw new EntityNotFoundException("Response", "Объявление на найдено.");
-    }
-
-    /// <inheritdoc />
-    public CategoryDto AfterExecuteRequestValidate_Category(CategoryDto? category)
-    {
-        return category is not null ? category : throw new EntityNotFoundException("Response", "Категория не найдена.");
-    }
-
-    /// <inheritdoc />
     public async Task<IFormFile> BeforeExecuteRequestValidate_IFormFileAsync(IFormFile? file, CancellationToken cancellationToken)
     {
         if (await new FormFileValidator().ValidateAsync(file!, cancellationToken) is ValidationResult result && !result.IsValid)
@@ -56,16 +43,12 @@ public class ValidationService(
     /// <inheritdoc />
     public Guid BeforeExecuteRequestValidate_Id(Guid? id)
     {
-        var propertyName = "Id";
-
         if (id.HasValue)
         {
-            return id.Value != Guid.Empty ? id.Value : throw new BadRequestException(propertyName, $"Поле '{propertyName}' не может иметь вид по умолчанию '{Guid.Empty}'.");
+            return id.Value != Guid.Empty ? id.Value : throw new BadRequestException("Id", $"Поле 'Id' не может иметь вид по умолчанию '{Guid.Empty}'.");
         }
-        else
-        {
-            throw new BadRequestException(propertyName, $"Поле '{propertyName}' не может быть пустым.");
-        }
+
+        throw new BadRequestException("Id", "Поле 'Id' не может быть пустым.");
     }
 
     /// <inheritdoc />

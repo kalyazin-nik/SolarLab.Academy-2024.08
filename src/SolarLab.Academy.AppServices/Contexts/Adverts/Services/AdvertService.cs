@@ -40,8 +40,8 @@ public class AdvertService(IAdvertRepository advertRepository,
     {
         using var _ = _structuralLoggingService.PushProperty("GetAdvertsByCategoryId", id!);
         _logger.LogInformation("Поиск объявлений по идентификатору категории: {@id}", id);
-        _validationService.BeforeExecuteRequestValidate_Id(id);
-        var collection = await _advertRepository.GetByCategoryIdAsync(id!.Value, cancellationToken);
+        id = _validationService.BeforeExecuteRequestValidate_Id(id);
+        var collection = await _advertRepository.GetByCategoryIdAsync(id.Value, cancellationToken);
         collection = _validationService.AfterExecuteRequestValidate_AdvertSmallCollection(collection);
 
         return collection;
@@ -52,9 +52,8 @@ public class AdvertService(IAdvertRepository advertRepository,
     {
         using var _ = _structuralLoggingService.PushProperty("GetAdvertById", id!);
         _logger.LogInformation("Поиск объявления по идентификатору: {@Id}", id);
-        id = _validationService.BeforeExecuteRequestValidate_Id(id);
+        id = await _validationService.BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes.AdvertRpository, id, cancellationToken);
         var advert = await _advertRepository.GetByIdAsync(id.Value, cancellationToken);
-        advert = _validationService.AfterExecuteRequestValidate_Advert(advert);
 
         return advert;
     }

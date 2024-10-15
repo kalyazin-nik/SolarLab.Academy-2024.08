@@ -42,14 +42,10 @@ public class AdvertRepository(
     }
 
     /// <inheritdoc />
-    public async Task<AdvertDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<AdvertDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        if (await _repository.GetByIdAsync(id, cancellationToken) is Advert advert)
-        {
-            return _mapper.Map<Advert, AdvertDto>(advert);
-        }
-
-        return null;
+        var advert = await _repository.GetByIdAsync(id, cancellationToken);
+        return _mapper.Map<Advert, AdvertDto>(advert);
     }
 
     /// <inheritdoc />

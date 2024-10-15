@@ -28,12 +28,12 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
     }
 
     /// <inheritdoc />
-    public async Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<CategoryDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _repository.GetAll()
             .Where(x => x.Id == id)
             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstAsync(cancellationToken);
     }
 
 

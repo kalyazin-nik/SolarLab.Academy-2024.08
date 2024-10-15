@@ -33,7 +33,7 @@ public interface IRepository<TEntity, TContext>
     /// <param name="id">Идентификатор.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Сущность <see cref="TEntity"/></returns>
-    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Возвращает сущности <see cref="TEntity"/> согласно условию.
