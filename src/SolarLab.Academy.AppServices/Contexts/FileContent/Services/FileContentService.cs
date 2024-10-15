@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.AppServices.Validator;
+using SolarLab.Academy.Contracts.Enums;
 using SolarLab.Academy.Contracts.FileContents;
 
 namespace SolarLab.Academy.AppServices.Contexts.FileContent.Services;
@@ -37,7 +38,7 @@ public class FileContentService(
     {
         using var _ = _structuralLoggingService.PushProperty("Id", id!);
         _logger.LogInformation("Скачивание файла: {@id}", id);
-        id = await _validationService.BeforExecuteRequestValidate_ExistFileAsync(id, cancellationToken);
+        id = await _validationService.BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes.FileRepository, id, cancellationToken);
 
         return await _repository.GetFileAsync(id.Value, cancellationToken);
     }
@@ -47,7 +48,7 @@ public class FileContentService(
     {
         using var _ = _structuralLoggingService.PushProperty("Id", id!);
         _logger.LogInformation("Получение информации о файле: {@id}", id);
-        id = await _validationService.BeforExecuteRequestValidate_ExistFileAsync(id, cancellationToken);
+        id = await _validationService.BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes.FileRepository, id, cancellationToken);
 
         return await _repository.GetFileInfoByIdAsync(id.Value, cancellationToken);
     }

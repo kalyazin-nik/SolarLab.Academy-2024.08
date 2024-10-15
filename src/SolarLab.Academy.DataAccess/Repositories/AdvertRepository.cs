@@ -72,4 +72,10 @@ public class AdvertRepository(
             .ProjectTo<AdvertSmallDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _repository.IsExistAsync(id, cancellationToken);
+    }
 }

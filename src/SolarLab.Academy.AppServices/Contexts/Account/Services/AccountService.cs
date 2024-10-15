@@ -7,6 +7,7 @@ using SolarLab.Academy.AppServices.Contexts.User.Repository;
 using SolarLab.Academy.AppServices.Helpers;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.AppServices.Validator;
+using SolarLab.Academy.Contracts.Enums;
 using SolarLab.Academy.Contracts.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -85,7 +86,8 @@ public class AccountService(
         _logger.LogInformation("Получение текущего пользователя: {@claims}", claims);
 
         var claimId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-        var id = await _validationService.BeforExecuteRequestValidate_ExistUserAsync(claimId is not null ? Guid.Parse(claimId) : null, cancellationToken);
+        var id = await _validationService.BeforExecuteRequestValidate_ExistEntityAsync(
+            RepositoriesTypes.UserRepository, claimId is not null ? Guid.Parse(claimId) : null, cancellationToken);
 
         return await _userRepository.GetByIdAsync(id, cancellationToken);
     }

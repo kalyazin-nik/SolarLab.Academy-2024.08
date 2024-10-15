@@ -2,6 +2,7 @@
 using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Categories;
+using SolarLab.Academy.Contracts.Enums;
 
 namespace SolarLab.Academy.AppServices.Validator;
 
@@ -55,45 +56,6 @@ public interface IValidationService
     Task<IFormFile> BeforeExecuteRequestValidate_IFormFileAsync(IFormFile? file, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Проверка, существует ли модель категории в репозитории по данному идентификатору.
-    /// </summary>
-    /// <remarks>
-    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор будет иметь значение null или по умолчанию.<br />
-    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется категория по данному идентификатору.
-    /// </remarks>
-    /// <param name="id">Идентификатор категории.</param>
-    /// <returns>Вернет true, если модель категории будет найдена.</returns>
-    /// <exception cref="BadRequestException" />
-    /// <exception cref="EntityNotFoundException" />
-    Task<bool> BeforExecuteRequestValidate_ExistCategoryAsync(Guid? id, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Проверка, существует ли модель файла в репозитории по данному идентификатору.
-    /// </summary>
-    /// <remarks>
-    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор будет иметь значение null или по умолчанию.<br />
-    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется файл по данному идентификатору.
-    /// </remarks>
-    /// <param name="id">Идентификатор файла.</param>
-    /// <returns>Утвержденный идентификатор.</returns>
-    /// <exception cref="BadRequestException" />
-    /// <exception cref="EntityNotFoundException" />
-    Task<Guid> BeforExecuteRequestValidate_ExistFileAsync(Guid? id, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Проверка, существует ли модель пользователя в репозитории по данному идентификатору.
-    /// </summary>
-    /// <remarks>
-    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор пользователя будет иметь значение null или по умолчанию.<br />
-    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется пользователь по данному идентификатору.
-    /// </remarks>
-    /// <param name="id">Идентификатор файла.</param>
-    /// <returns>Утвержденный идентификатор.</returns>
-    /// <exception cref="BadRequestException" />
-    /// <exception cref="EntityNotFoundException" />
-    Task<Guid> BeforExecuteRequestValidate_ExistUserAsync(Guid? id, CancellationToken cancellationToken);
-
-    /// <summary>
     /// Проверка идентификатора, допускающего значение null, перед выполнением запроса к репозиторию. 
     /// </summary>
     /// <remarks>
@@ -103,4 +65,19 @@ public interface IValidationService
     /// <returns>Утвержденный идентификатор.</returns>
     /// <exception cref="BadRequestException" />
     Guid BeforeExecuteRequestValidate_Id(Guid? id);
+
+    /// <summary>
+    /// Проверка, существует ли сущность в репозитории по данному идентификатору.
+    /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="BadRequestException"/>, если идентификатор пользователя будет иметь значение null или по умолчанию.<br />
+    /// Также будет выбрашено исключение <see cref="EntityNotFoundException"/>, если в репозитории не найдется сущность по данному идентификатору.<br />
+    /// Исключение <see cref="NotImplementedException"/> будет выбрашено в случае, если аргументом передастся тип репозитория <see cref="RepositoriesTypes"/> не добавленный в сервис.
+    /// </remarks>
+    /// <param name="id">Идентификатор файла.</param>
+    /// <returns>Утвержденный идентификатор.</returns>
+    /// <exception cref="BadRequestException" />
+    /// <exception cref="EntityNotFoundException" />
+    /// <exception cref="NotImplementedException" />
+    Task<Guid> BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes repositoryType, Guid? id, CancellationToken cancellationToken);
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.Contracts.FileContents;
 
 namespace SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
@@ -6,7 +7,7 @@ namespace SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
 /// <summary>
 /// Интерфейс репозитория по работе с файлами.
 /// </summary>
-public interface IFileContentRepository
+public interface IFileContentRepository : IBaseRepository
 {
     /// <summary>
     /// Загрузка файла в репозиторий.

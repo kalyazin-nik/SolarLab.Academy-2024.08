@@ -4,6 +4,7 @@ using SolarLab.Academy.AppServices.Contexts.Adverts.Repositories;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.AppServices.Validator;
 using SolarLab.Academy.Contracts.Advert;
+using SolarLab.Academy.Contracts.Enums;
 
 namespace SolarLab.Academy.AppServices.Contexts.Adverts.Services;
 
@@ -29,7 +30,7 @@ public class AdvertService(IAdvertRepository advertRepository,
     {
         using var _ = _structuralLoggingService.PushProperty("CreateAdvert", createAdvert, true);
         _logger.LogInformation("Создание объявления: {@createAdvert}", createAdvert);
-        await _validationService.BeforExecuteRequestValidate_ExistCategoryAsync(createAdvert.CategoryId, cancellationToken);
+        await _validationService.BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes.CategoryRpository, createAdvert.CategoryId, cancellationToken);
 
         return await _advertRepository.CreateAsync(createAdvert, cancellationToken);
     }

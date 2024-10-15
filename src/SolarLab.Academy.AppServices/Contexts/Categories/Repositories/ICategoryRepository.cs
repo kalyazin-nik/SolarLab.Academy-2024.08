@@ -1,11 +1,12 @@
-﻿using SolarLab.Academy.Contracts.Categories;
+﻿using SolarLab.Academy.AppServices.Services;
+using SolarLab.Academy.Contracts.Categories;
 
 namespace SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
 
 /// <summary>
 /// Репозиторий по работе с категорией.
 /// </summary>
-public interface ICategoryRepository
+public interface ICategoryRepository : IBaseRepository
 {
     /// <summary>
     /// Добавление категории в репозиторий.

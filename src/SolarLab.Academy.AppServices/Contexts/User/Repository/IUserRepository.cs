@@ -1,11 +1,12 @@
-﻿using SolarLab.Academy.Contracts.User;
+﻿using SolarLab.Academy.AppServices.Services;
+using SolarLab.Academy.Contracts.User;
 
 namespace SolarLab.Academy.AppServices.Contexts.User.Repository;
 
 /// <summary>
 /// Интерфейс репоозитория по работе с пользователями.
 /// </summary>
-public interface IUserRepository
+public interface IUserRepository : IBaseRepository
 {
     /// <summary>
     /// Регистрация пользователя.
@@ -37,12 +38,4 @@ public interface IUserRepository
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Объект передачи данных ответа запроса логина пользователя.</returns>
     Task<UserLoginResponseDto?> GetByLoginAsync(UserLoginRequestDto dto, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Проверка, существует ли пользователь в репозитории.
-    /// </summary>
-    /// <param name="id">Идентификатор пользователя.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Вернет true, в случае если пользователь будет найден, иначе false.</returns>
-    Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken);
 }

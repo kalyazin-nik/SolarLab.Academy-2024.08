@@ -35,4 +35,11 @@ public class CategoryRepository(IRepository<Category, AcademyDbContext> reposito
             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+
+    /// <inheritdoc />
+    public async Task<bool> IsExistAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _repository.IsExistAsync(id, cancellationToken);
+    }
 }

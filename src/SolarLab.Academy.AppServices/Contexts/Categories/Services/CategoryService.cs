@@ -3,6 +3,7 @@ using SolarLab.Academy.AppServices.Contexts.Categories.Repositories;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.AppServices.Validator;
 using SolarLab.Academy.Contracts.Categories;
+using SolarLab.Academy.Contracts.Enums;
 
 namespace SolarLab.Academy.AppServices.Contexts.Categories.Services;
 
@@ -29,11 +30,7 @@ public class CategoryService(
     {
         using var _ = _structuralLoggingService.PushProperty("CreateCategory", createCategory, true);
         _logger.LogInformation("Создание объявления: {@createCategory}", createCategory);
-
-        if (createCategory.ParentId.HasValue)
-        {
-            await _validationService.BeforExecuteRequestValidate_ExistCategoryAsync(createCategory.ParentId, cancellationToken);
-        }
+        await _validationService.BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes.CategoryRpository, createCategory.ParentId, cancellationToken);
 
         return await _categoryRepository.CreateAsync(createCategory, cancellationToken);
     }

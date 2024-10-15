@@ -1,11 +1,12 @@
-﻿using SolarLab.Academy.Contracts.Advert;
+﻿using SolarLab.Academy.AppServices.Services;
+using SolarLab.Academy.Contracts.Advert;
 
 namespace SolarLab.Academy.AppServices.Contexts.Adverts.Repositories;
 
 /// <summary>
 /// Репозиторий для работы с объявлнеиями.
 /// </summary>
-public interface IAdvertRepository
+public interface IAdvertRepository : IBaseRepository
 {
     /// <summary>
     /// Создает объявление по модели запроса.
