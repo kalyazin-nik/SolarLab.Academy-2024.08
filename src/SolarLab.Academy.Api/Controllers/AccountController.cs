@@ -12,15 +12,13 @@ namespace SolarLab.Academy.Api.Controllers;
 /// Контроллер учётных записей.
 /// </summary>
 /// <param name="accountService">Сервис по работе с учетными записями.</param>
-/// <param name="logger">Логгер <see cref="AccountController"/></param>
 [ApiController]
 [Route("accounts")]
 [AllowAnonymous]
 [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-public class AccountController(IAccountService accountService, ILogger<AccountController> logger) : ControllerBase
+public class AccountController(IAccountService accountService) : ControllerBase
 {
     private readonly IAccountService _accountService = accountService;
-    private readonly ILogger<AccountController> _logger = logger;
 
     /// <summary>
     /// Регистрация пользователя.
@@ -40,17 +38,16 @@ public class AccountController(IAccountService accountService, ILogger<AccountCo
     /// <summary>
     /// Авторизация пользователя.
     /// </summary>
-    /// <param name="model">Объект передачи данных запроса авторизации пользователя.</param>
+    /// <param name="loginRequest">Модель запроса авторизации пользователя.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Токен авторизации.</returns>
     [HttpPost]
     [Route("login")]
+    [ProducesResponseType(typeof(UnauthorizedError), (int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequestDto model, CancellationToken cancellationToken)
+    public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequestDto loginRequest, CancellationToken cancellationToken)
     {
-        var result = await _accountService.LoginAsync(model, cancellationToken);
-
-        return Ok(result);
+        return Ok(await _accountService.LoginAsync(loginRequest, cancellationToken));
     }
 
     /// <summary>

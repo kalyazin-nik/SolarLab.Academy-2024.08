@@ -1,7 +1,7 @@
 ﻿namespace SolarLab.Academy.Contracts.User;
 
 /// <summary>
-/// Объект передачи данных запроса входа пользователя в систему.
+/// Модель запроса входа пользователя в систему.
 /// </summary>
 public class UserLoginRequestDto
 {

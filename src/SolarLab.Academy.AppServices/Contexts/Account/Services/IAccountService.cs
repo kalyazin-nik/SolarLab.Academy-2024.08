@@ -20,10 +20,14 @@ public interface IAccountService
     /// <summary>
     /// Вход в систему.
     /// </summary>
-    /// <param name="dto">Объект передачи данных входа пользователя в систему.</param>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="UnauthorizedException"/>, если пользователь не будет найден или окажется, что пароль неверный.
+    /// </remarks>
+    /// <param name="loginRequest">Объект передачи данных входа пользователя в систему.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Токен для входа в систему.</returns>
-    Task<string> LoginAsync(UserLoginRequestDto dto, CancellationToken cancellationToken);
+    /// <exception cref="UnauthorizedException" />
+    Task<string> LoginAsync(UserLoginRequestDto loginRequest, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить текущего пользователя.

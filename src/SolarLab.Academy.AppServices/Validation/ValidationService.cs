@@ -6,9 +6,11 @@ using SolarLab.Academy.AppServices.Contexts.FileContent.Repositories;
 using SolarLab.Academy.AppServices.Contexts.FileContent.Validator;
 using SolarLab.Academy.AppServices.Contexts.User.Repository;
 using SolarLab.Academy.AppServices.Exceptions;
+using SolarLab.Academy.AppServices.Helpers;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Enums;
+using SolarLab.Academy.Contracts.User;
 
 namespace SolarLab.Academy.AppServices.Validator;
 
@@ -86,5 +88,17 @@ public class ValidationService(
             RepositoriesTypes.FileRepository => "Файл",
             _ => throw new NotImplementedException()
         };
+    }
+
+    /// <inheritdoc />
+    public async Task<UserLoginResponseDto> BeforExecuteRequestValidate_ExistUserByLoginRequestAsync(UserLoginRequestDto loginRequest, CancellationToken cancellationToken)
+    {
+        var existUser = await _userRepository.GetByLoginAsync(loginRequest, cancellationToken);
+        if (existUser is null || existUser.Password != CryptoHelper.GetBase64Hash(loginRequest.Password))
+        {
+            throw new UnauthorizedException("AuthorizationRequest", "Логин или пароль введены неверно.");
+        }
+
+        return existUser;
     }
 }

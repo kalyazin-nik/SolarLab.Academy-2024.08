@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using SolarLab.Academy.AppServices.Contexts.Account.Validator;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Validator;
 using SolarLab.Academy.AppServices.Contexts.Categories.Validator;
 using SolarLab.Academy.AppServices.Contexts.User.Validator;
@@ -15,6 +16,7 @@ public static class ValidatorRegistrar
         services.AddValidatorsFromAssemblyContaining<AdvertSearchRequestValidator>();
         services.AddValidatorsFromAssemblyContaining<CategoryCreateValidator>();
         services.AddValidatorsFromAssemblyContaining<UserRegisterValidator>();
+        services.AddValidatorsFromAssemblyContaining<UserLoginRequestValidator>();
 
         services.AddFluentValidationAutoValidation();
 

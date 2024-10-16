@@ -58,10 +58,11 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
 
         return exception switch
         {
-            BadRequestException ex => GetError<BadRequestException, BadRequestError>(ex, statusCode, traceId),
-            EntitiesNotFoundException ex => GetError<EntitiesNotFoundException, NotFoundError>(ex, statusCode, traceId),
-            EntityNotFoundException ex => GetError<EntityNotFoundException, NotFoundError>(ex, statusCode, traceId),
-            IdNotFoundException ex => GetError<IdNotFoundException, NotFoundError>(ex, statusCode,  traceId),
+            BadRequestException ex => GetErrorModel<BadRequestException, BadRequestError>(ex, statusCode, traceId),
+            EntitiesNotFoundException ex => GetErrorModel<EntitiesNotFoundException, NotFoundError>(ex, statusCode, traceId),
+            EntityNotFoundException ex => GetErrorModel<EntityNotFoundException, NotFoundError>(ex, statusCode, traceId),
+            IdNotFoundException ex => GetErrorModel<IdNotFoundException, NotFoundError>(ex, statusCode,  traceId),
+            UnauthorizedException ex => GetErrorModel<UnauthorizedException, UnauthorizedError>(ex, statusCode, traceId),
             _ => environment.IsDevelopment() ? new DevelopmentError
             {
                 Message = exception.Message,
@@ -80,7 +81,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         };
     }
 
-    private static TError GetError<TException, TError>(TException exception, int statusCode, string? traceId)
+    private static TError GetErrorModel<TException, TError>(TException exception, int statusCode, string? traceId)
         where TException : IApiException
         where TError : IApiProcessedError, new()
     {
@@ -89,7 +90,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
             Type = exception.Type,
             Title = exception.Title,
             StatusCode = statusCode,
-            Errors = exception.ValidationResult.ToDictionary(),
+            Errors = exception.ValidationResult?.ToDictionary(),
             TraceId = traceId
         };
     }
@@ -104,6 +105,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
             EntityNotFoundException => HttpStatusCode.NotFound,
             EntitiesNotFoundException => HttpStatusCode.NotFound,
             IdNotFoundException => HttpStatusCode.NotFound,
+            UnauthorizedException => HttpStatusCode.Unauthorized,
             _ => HttpStatusCode.InternalServerError
         });
     }

@@ -3,6 +3,7 @@ using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.Contracts.Advert;
 using SolarLab.Academy.Contracts.Categories;
 using SolarLab.Academy.Contracts.Enums;
+using SolarLab.Academy.Contracts.User;
 
 namespace SolarLab.Academy.AppServices.Validator;
 
@@ -58,4 +59,15 @@ public interface IValidationService
     /// <exception cref="EntityNotFoundException" />
     /// <exception cref="NotImplementedException" />
     Task<Guid> BeforExecuteRequestValidate_ExistEntityAsync(RepositoriesTypes repositoryType, Guid? id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверка, существует ли пользователь в репозитории по данному логину и корректность его пароля.
+    /// </summary>
+    /// <remarks>
+    /// Будет выбрашено исключение <see cref="UnauthorizedException"/>, если пользователь не будет найден или окажется, что пароль неверный.
+    /// </remarks>
+    /// <param name="id">Модель запроса входа пользователя в систему.</param>
+    /// <returns>Утвержденная модель ответа входа пользователя в систему.</returns>
+    /// <exception cref="UnauthorizedException" />
+    Task<UserLoginResponseDto> BeforExecuteRequestValidate_ExistUserByLoginRequestAsync(UserLoginRequestDto loginRequest, CancellationToken cancellationToken);
 }

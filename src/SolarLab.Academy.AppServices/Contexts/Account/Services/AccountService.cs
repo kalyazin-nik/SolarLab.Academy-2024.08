@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using SolarLab.Academy.AppServices.Contexts.Adverts.Services;
 using SolarLab.Academy.AppServices.Contexts.User.Repository;
+using SolarLab.Academy.AppServices.Exceptions;
 using SolarLab.Academy.AppServices.Helpers;
 using SolarLab.Academy.AppServices.Services;
 using SolarLab.Academy.AppServices.Validator;
@@ -49,14 +50,9 @@ public class AccountService(
     }
 
     /// <inheritdoc />
-    public async Task<string> LoginAsync(UserLoginRequestDto dto, CancellationToken cancellationToken)
+    public async Task<string> LoginAsync(UserLoginRequestDto loginRequest, CancellationToken cancellationToken)
     {
-        var existUser = await _userRepository.GetByLoginAsync(dto, cancellationToken) ?? throw new Exception("Пользлователь не найден!");
-        if (existUser.Password != CryptoHelper.GetBase64Hash(dto.Password))
-        {
-            throw new Exception("Неверный пароль!");
-        }
-
+        var existUser = await _validationService.BeforExecuteRequestValidate_ExistUserByLoginRequestAsync(loginRequest, cancellationToken);
         var secretKey = _configuration["Jwt:Key"]!;
         var claims = new List<Claim>
         {

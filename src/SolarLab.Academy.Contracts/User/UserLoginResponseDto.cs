@@ -1,7 +1,7 @@
 ﻿namespace SolarLab.Academy.Contracts.User;
 
 /// <summary>
-/// Объект передачи данных ответа входа пользователя в систему.
+/// Модель ответа входа пользователя в систему.
 /// </summary>
 public class UserLoginResponseDto
 {
